@@ -1,0 +1,92 @@
+name: Build Executables
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.target }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: linux
+            runner: ubuntu-latest
+            pkg_target: node22-linux-x64
+            artifact_name: pdq-linux-x64
+
+          - target: macos
+            runner: macos-latest
+            pkg_target: node22-macos-x64
+            artifact_name: pdq-macos-x64
+
+          - target: windows
+            runner: windows-latest
+            pkg_target: node22-win-x64
+            artifact_name: pdq-windows-x64.exe
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile TypeScript
+        run: npm run build
+
+      - name: Build executable (Linux / macOS)
+        if: matrix.target != 'windows'
+        run: |
+          npx pkg dist/index.js \
+            --target ${{ matrix.pkg_target }} \
+            --output dist/${{ matrix.artifact_name }}
+
+      - name: Build executable (Windows)
+        if: matrix.target == 'windows'
+        run: |
+          npx pkg dist/index.js `
+            --target ${{ matrix.pkg_target }} `
+            --output dist/${{ matrix.artifact_name }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.artifact_name }}
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Display structure
+        run: ls -R artifacts/
+
+      - name: Create release and upload binaries
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/pdq-linux-x64/pdq-linux-x64
+            artifacts/pdq-macos-x64/pdq-macos-x64
+            artifacts/pdq-windows-x64.exe/pdq-windows-x64.exe
+          generate_release_notes: true
