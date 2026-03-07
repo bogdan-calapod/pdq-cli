@@ -97,6 +97,23 @@ pdq connect packages list --filter name=~Firefox
 pdq connect packages get pkg_abc123
 ```
 
+### `pdq get-skill`
+
+Prints a `SKILL.md` file that tells AI coding assistants how to use this CLI — what commands exist, what flags they accept, and example invocations.
+
+```sh
+# Print to stdout (pipe into your AI tool or inspect it)
+pdq get-skill
+
+# Write directly to the OpenCode skills directory
+pdq get-skill --out .opencode/skills/pdq-cli/SKILL.md
+
+# Or any other AI assistant location
+pdq get-skill --out .claude/skills/pdq-cli/SKILL.md
+```
+
+---
+
 ### `pdq connect deployments`
 
 ```sh
