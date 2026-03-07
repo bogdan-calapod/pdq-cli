@@ -22,12 +22,32 @@ Grab the latest binary for your platform from the [Releases](../../releases) pag
 | macOS (x64) | `pdq-macos-x64` |
 | Windows (x64) | `pdq-windows-x64.exe` |
 
-Make the binary executable (Linux/macOS):
-
+**Linux:**
 ```sh
 chmod +x pdq-linux-x64
 sudo mv pdq-linux-x64 /usr/local/bin/pdq
 ```
+
+**macOS:**
+```sh
+chmod +x pdq-macos-x64
+sudo mv pdq-macos-x64 /usr/local/bin/pdq
+```
+
+> [!NOTE]
+> **macOS Gatekeeper:** The binary is not notarized (Apple notarization requires a paid Developer account). macOS will block it on first run with *"cannot be opened because the developer cannot be verified"*.
+>
+> To allow it, remove the quarantine attribute that macOS sets on files downloaded from the internet:
+> ```sh
+> xattr -d com.apple.quarantine pdq-macos-x64
+> ```
+> You only need to do this once, before moving the binary to your PATH.
+>
+> Alternatively, open **System Settings → Privacy & Security**, scroll down to the blocked app notice, and click **Allow Anyway**.
+
+**Windows:**
+
+Rename `pdq-windows-x64.exe` to `pdq.exe` and move it to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**.
 
 ### Run from source
 
