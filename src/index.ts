@@ -8,10 +8,7 @@ import { SKILL_CONTENT } from "./skill.js";
 
 const program = new Command();
 
-program
-  .name("pdq")
-  .description("CLI for PDQ products")
-  .version("0.1.0");
+program.name("pdq").description("CLI for PDQ products").version("0.1.0");
 
 registerConnectCommand(program);
 registerDetectCommand(program);
@@ -21,10 +18,7 @@ program
   .description(
     "Print a SKILL.md for use with AI coding assistants (e.g. save to .opencode/skills/pdq-cli/SKILL.md)"
   )
-  .option(
-    "-o, --out <path>",
-    "Write the skill file to this path instead of stdout"
-  )
+  .option("-o, --out <path>", "Write the skill file to this path instead of stdout")
   .action((opts: { out?: string }) => {
     if (opts.out) {
       const dest = path.resolve(opts.out);

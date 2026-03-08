@@ -32,13 +32,8 @@ function packageToDetailRow(p: Package): Record<string, unknown> {
   };
 }
 
-export function registerPackagesCommands(
-  parent: Command,
-  getClient: () => PDQConnectClient
-): void {
-  const packages = parent
-    .command("packages")
-    .description("Manage PDQ Connect packages");
+export function registerPackagesCommands(parent: Command, getClient: () => PDQConnectClient): void {
+  const packages = parent.command("packages").description("Manage PDQ Connect packages");
 
   // ── list ──────────────────────────────────────────────────────────────────
   packages
@@ -51,11 +46,7 @@ export function registerPackagesCommands(
       [] as string[]
     )
     .option("-s, --sort <field>", "Sort by field (e.g. name, nameDesc)")
-    .option(
-      "-o, --output <format>",
-      "Output format: table, json, csv",
-      "table"
-    )
+    .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { filter: string[]; sort?: string; output: string }) => {
       try {
         const filter = parseFilter(opts.filter);
@@ -70,11 +61,7 @@ export function registerPackagesCommands(
   packages
     .command("get <id>")
     .description("Get a package with its available versions")
-    .option(
-      "-o, --output <format>",
-      "Output format: table, json, csv",
-      "table"
-    )
+    .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (id: string, opts: { output: string }) => {
       try {
         const pkg = await getClient().getPackage(id);

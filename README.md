@@ -10,10 +10,10 @@ A command-line interface for PDQ products, written in TypeScript.
 
 ## Products supported
 
-| Sub-command | Product |
-|---|---|
-| `pdq connect` | <img src="https://images.ctfassets.net/xwxknivhjv1b/5w5RibUZmOYIkBp38T0T3T/4407353331280c7df23d6c30ec73c31a/PDQ_Connect_icon_nav.svg" height="16" valign="middle"> [PDQ Connect](https://www.pdq.com/pdq-connect/) — cloud endpoint management |
-| `pdq detect` | <img src="https://images.ctfassets.net/xwxknivhjv1b/5dT1851qNyntmKDcX3sBYG/126512b65cad5f5a3df43dc87d1be682/PDQ_Detect_icon_nav.svg" height="16" valign="middle"> [PDQ Detect](https://www.pdq.com/pdq-detect/) — vulnerability and risk management |
+| Sub-command   | Product                                                                                                                                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pdq connect` | <img src="https://images.ctfassets.net/xwxknivhjv1b/5w5RibUZmOYIkBp38T0T3T/4407353331280c7df23d6c30ec73c31a/PDQ_Connect_icon_nav.svg" height="16" valign="middle"> [PDQ Connect](https://www.pdq.com/pdq-connect/) — cloud endpoint management      |
+| `pdq detect`  | <img src="https://images.ctfassets.net/xwxknivhjv1b/5dT1851qNyntmKDcX3sBYG/126512b65cad5f5a3df43dc87d1be682/PDQ_Detect_icon_nav.svg" height="16" valign="middle"> [PDQ Detect](https://www.pdq.com/pdq-detect/) — vulnerability and risk management |
 
 ## Installation
 
@@ -21,31 +21,35 @@ A command-line interface for PDQ products, written in TypeScript.
 
 Grab the latest binary for your platform from the [Releases](../../releases) page — no Node.js required.
 
-| Platform | File |
-|---|---|
-| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux | `pdq-linux` |
-| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS | `pdq-macos` |
+| Platform                                                                  | File              |
+| ------------------------------------------------------------------------- | ----------------- |
+| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux     | `pdq-linux`       |
+| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS     | `pdq-macos`       |
 | <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows | `pdq-windows.exe` |
 
 **Linux:**
+
 ```sh
 chmod +x pdq-linux
 sudo mv pdq-linux /usr/local/bin/pdq
 ```
 
 **macOS:**
+
 ```sh
 chmod +x pdq-macos
 sudo mv pdq-macos /usr/local/bin/pdq
 ```
 
 > [!NOTE]
-> **macOS Gatekeeper:** The binary is not notarized (Apple notarization requires a paid Developer account). macOS will block it on first run with *"cannot be opened because the developer cannot be verified"*.
+> **macOS Gatekeeper:** The binary is not notarized (Apple notarization requires a paid Developer account). macOS will block it on first run with _"cannot be opened because the developer cannot be verified"_.
 >
 > To allow it, remove the quarantine attribute that macOS sets on files downloaded from the internet:
+>
 > ```sh
 > xattr -d com.apple.quarantine pdq-macos
 > ```
+>
 > You only need to do this once, before moving the binary to your PATH.
 >
 > Alternatively, open **System Settings → Privacy & Security**, scroll down to the blocked app notice, and click **Allow Anyway**.

@@ -111,12 +111,7 @@ export interface ApplicationDetails {
 
 // ── Vulnerabilities ─────────────────────────────────────────────────────────
 
-export type VulnState =
-  | "open"
-  | "accepted_risk"
-  | "in_review"
-  | "resolved"
-  | "false_positive";
+export type VulnState = "open" | "accepted_risk" | "in_review" | "resolved" | "false_positive";
 
 export interface CveListing {
   id: number;
@@ -167,13 +162,7 @@ export interface ExtendMessageRequest {
 
 // ── Scans ────────────────────────────────────────────────────────────────────
 
-export type ScanStatus =
-  | "created"
-  | "running"
-  | "done"
-  | "interrupted"
-  | "requested"
-  | "stopped";
+export type ScanStatus = "created" | "running" | "done" | "interrupted" | "requested" | "stopped";
 
 export interface ScanListing {
   uuid: string;

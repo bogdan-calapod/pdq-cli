@@ -12,8 +12,7 @@ interface ConfigFile {
 }
 
 function getConfigFilePath(): string {
-  const xdgConfigHome =
-    process.env["XDG_CONFIG_HOME"] ?? path.join(os.homedir(), ".config");
+  const xdgConfigHome = process.env["XDG_CONFIG_HOME"] ?? path.join(os.homedir(), ".config");
   return path.join(xdgConfigHome, CONFIG_DIR_NAME, CONFIG_FILE_NAME);
 }
 

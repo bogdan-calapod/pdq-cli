@@ -15,13 +15,8 @@ function groupToRow(g: Group): Record<string, unknown> {
   };
 }
 
-export function registerGroupsCommands(
-  parent: Command,
-  getClient: () => PDQConnectClient
-): void {
-  const groups = parent
-    .command("groups")
-    .description("Manage PDQ Connect groups");
+export function registerGroupsCommands(parent: Command, getClient: () => PDQConnectClient): void {
+  const groups = parent.command("groups").description("Manage PDQ Connect groups");
 
   // ── list ──────────────────────────────────────────────────────────────────
   groups
@@ -34,11 +29,7 @@ export function registerGroupsCommands(
       [] as string[]
     )
     .option("-s, --sort <field>", "Sort by field (e.g. name, insertedAtDesc)")
-    .option(
-      "-o, --output <format>",
-      "Output format: table, json, csv",
-      "table"
-    )
+    .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { filter: string[]; sort?: string; output: string }) => {
       try {
         const filter = parseFilter(opts.filter);

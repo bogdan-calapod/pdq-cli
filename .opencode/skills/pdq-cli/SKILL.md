@@ -13,6 +13,7 @@ metadata:
 `pdq-cli` is a Node.js 22 CLI written in TypeScript, compiled to CommonJS via `tsc`. It uses `commander` for subcommand routing and `cli-table3` for terminal output. Binaries for Linux, macOS, and Windows are produced by `@yao-pkg/pkg` in a GitHub Actions workflow triggered by `v*` tags.
 
 The top-level command is `pdq`. Products are namespaced as sub-commands:
+
 - `pdq connect <resource> <action>` — PDQ Connect API
 - `pdq detect <resource> <action>` — PDQ Detect API
 
@@ -73,37 +74,43 @@ Column projection for table/csv is passed as the second argument to `printTable`
 
 `src/config.ts` resolution order for each product:
 
-| | Connect | Detect |
-|---|---|---|
-| Env var | `PDQ_CONNECT_API_KEY` | `PDQ_DETECT_API_KEY` |
-| Config key | `connectApiKey` | `detectApiKey` |
-| Base URL env var | — | `PDQ_DETECT_URL` |
-| Base URL config key | — | `detectBaseUrl` |
-| Base URL default | `https://connect.pdq.com` | `https://detect.pdq.com` |
+|                     | Connect                   | Detect                   |
+| ------------------- | ------------------------- | ------------------------ |
+| Env var             | `PDQ_CONNECT_API_KEY`     | `PDQ_DETECT_API_KEY`     |
+| Config key          | `connectApiKey`           | `detectApiKey`           |
+| Base URL env var    | —                         | `PDQ_DETECT_URL`         |
+| Base URL config key | —                         | `detectBaseUrl`          |
+| Base URL default    | `https://connect.pdq.com` | `https://detect.pdq.com` |
 
 Config file location: `$XDG_CONFIG_HOME/pdqcli/config.json` (falls back to `~/.config/pdqcli/config.json`).
 
 `set*` helpers in `config.ts` write/merge the config file and create the directory if needed.
 
-## Linting
+## Linting & Formatting
 
-ESLint with TypeScript support is configured in `eslint.config.mjs`. A pre-commit hook (Husky + lint-staged) runs `eslint --fix` on staged files automatically.
+ESLint and Prettier are configured. A pre-commit hook (Husky + lint-staged) runs both on staged files.
 
 ```sh
-npm run lint       # check for issues
-npm run lint:fix   # auto-fix what's possible
+npm run lint          # check for lint issues
+npm run lint:fix      # auto-fix lint issues
+npm run format        # format all files with Prettier
+npm run format:check  # check formatting without writing
 ```
 
-Key rules:
-- No unused variables/imports (use `_` prefix to ignore intentionally)
+ESLint rules:
+
+- No unused variables/imports (use `_` prefix to ignore)
 - Consistent type imports (`import type` for type-only)
 - No floating promises
 - Non-null assertions warned
+
+Prettier: double quotes, semicolons, 2-space indent, 100 char width.
 
 ## Build & release
 
 ```sh
 npm run lint           # lint first (CI does this)
+npm run format:check   # check formatting
 npm run build          # tsc → dist/
 npm run pkg:all        # produce all three platform binaries in dist/
 ```

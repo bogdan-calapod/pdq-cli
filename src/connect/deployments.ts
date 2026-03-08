@@ -5,9 +5,7 @@ export function registerDeploymentsCommands(
   parent: Command,
   getClient: () => PDQConnectClient
 ): void {
-  const deployments = parent
-    .command("deployments")
-    .description("Manage PDQ Connect deployments");
+  const deployments = parent.command("deployments").description("Manage PDQ Connect deployments");
 
   // ── create ────────────────────────────────────────────────────────────────
   deployments

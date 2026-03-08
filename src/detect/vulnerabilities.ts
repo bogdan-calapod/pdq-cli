@@ -28,17 +28,10 @@ export function registerVulnerabilitiesCommands(
     .command("list")
     .description("List all CVEs in the CVE Manager")
     .option("-f, --filter <text>", "Text filter")
-    .option(
-      "--filter-col <column>",
-      "Column to apply text filter to (cve, summary, ...)"
-    )
+    .option("--filter-col <column>", "Column to apply text filter to (cve, summary, ...)")
     .option("--open-only", "Only show open (unresolved) vulnerabilities")
     .option("--sort <column>", "Sort column (e.g. cvssBase, publishedDate)")
-    .option(
-      "--sort-dir <dir>",
-      "Sort direction: ascending or descending",
-      "descending"
-    )
+    .option("--sort-dir <dir>", "Sort direction: ascending or descending", "descending")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(
       async (opts: {
@@ -64,8 +57,7 @@ export function registerVulnerabilitiesCommands(
               cve: v.cve ?? "",
               cvssBase: v.cvssBase ?? "",
               isWeaponized: v.isWeaponized != null ? String(v.isWeaponized) : "",
-              isExploitable:
-                v.isExploitable != null ? String(v.isExploitable) : "",
+              isExploitable: v.isExploitable != null ? String(v.isExploitable) : "",
               affectedDevices: v.affectedDevices ?? "",
               affectedApplications: v.affectedApplications ?? "",
               state: v.state ?? "",

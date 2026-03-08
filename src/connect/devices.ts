@@ -39,13 +39,8 @@ function deviceToRow(d: Device): Record<string, unknown> {
   };
 }
 
-export function registerDevicesCommands(
-  parent: Command,
-  getClient: () => PDQConnectClient
-): void {
-  const devices = parent
-    .command("devices")
-    .description("Manage PDQ Connect devices");
+export function registerDevicesCommands(parent: Command, getClient: () => PDQConnectClient): void {
+  const devices = parent.command("devices").description("Manage PDQ Connect devices");
 
   // ── list ──────────────────────────────────────────────────────────────────
   devices
@@ -59,11 +54,7 @@ export function registerDevicesCommands(
       [] as string[]
     )
     .option("-s, --sort <field>", "Sort by field (e.g. name, lastSeenAtDesc)")
-    .option(
-      "-o, --output <format>",
-      "Output format: table, json, csv",
-      "table"
-    )
+    .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { group?: string; filter: string[]; sort?: string; output: string }) => {
       try {
         const filter = parseFilter(opts.filter);
@@ -83,11 +74,7 @@ export function registerDevicesCommands(
   devices
     .command("get <id>")
     .description("Get details for a single device")
-    .option(
-      "-o, --output <format>",
-      "Output format: table, json, csv",
-      "table"
-    )
+    .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (id: string, opts: { output: string }) => {
       try {
         const device = await getClient().getDevice(id);

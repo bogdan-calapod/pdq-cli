@@ -13,6 +13,8 @@
     "build": "tsc",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "pkg:linux": "pkg dist/index.js -t node22-linux-x64 -o dist/pdq-linux",
     "pkg:macos": "pkg dist/index.js -t node22-macos-arm64 -o dist/pdq-macos",
     "pkg:windows": "pkg dist/index.js -t node22-win-x64 -o dist/pdq-windows.exe",
@@ -21,7 +23,11 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
-      "eslint --fix"
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
     ]
   },
   "dependencies": {
@@ -35,6 +41,7 @@
     "eslint": "^10.0.3",
     "husky": "^9.1.7",
     "lint-staged": "^16.3.2",
+    "prettier": "^3.8.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.0",
     "typescript-eslint": "^8.56.1"

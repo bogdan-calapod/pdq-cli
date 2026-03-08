@@ -29,9 +29,7 @@ export function printTable(
     // For JSON, print the full rows (not just selected columns) unless columns
     // were explicitly requested, in which case we project.
     const projected = columns
-      ? rows.map((r) =>
-          Object.fromEntries(keys.map((k) => [k, r[k] ?? null]))
-        )
+      ? rows.map((r) => Object.fromEntries(keys.map((k) => [k, r[k] ?? null])))
       : rows;
     console.log(JSON.stringify(projected, null, 2));
     return;
@@ -69,10 +67,7 @@ function csvEscape(value: string): string {
 /**
  * Print a single object as a two-column key/value table.
  */
-export function printRecord(
-  record: Record<string, unknown>,
-  format: OutputFormat
-): void {
+export function printRecord(record: Record<string, unknown>, format: OutputFormat): void {
   if (format === "json") {
     console.log(JSON.stringify(record, null, 2));
     return;

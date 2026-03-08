@@ -52,8 +52,7 @@ function overviewToRecord(d: DeviceOverview): Record<string, unknown> {
     low: d.lowVulnerabilityCount ?? 0,
     tags: d.tags?.join(", ") ?? "",
     businessContexts: d.businessContexts?.map((c) => c.name).join(", ") ?? "",
-    technicalContexts:
-      d.technicalContexts?.map((c) => c.name).join(", ") ?? "",
+    technicalContexts: d.technicalContexts?.map((c) => c.name).join(", ") ?? "",
   };
 }
 
@@ -70,13 +69,8 @@ function osToRecord(os: DeviceOS): Record<string, unknown> {
   };
 }
 
-export function registerDevicesCommands(
-  parent: Command,
-  getClient: () => PDQDetectClient
-): void {
-  const devices = parent
-    .command("devices")
-    .description("Manage PDQ Detect devices");
+export function registerDevicesCommands(parent: Command, getClient: () => PDQDetectClient): void {
+  const devices = parent.command("devices").description("Manage PDQ Detect devices");
 
   // ── list ──────────────────────────────────────────────────────────────────
   devices
@@ -85,36 +79,44 @@ export function registerDevicesCommands(
     .option("--name <name>", "Filter by device name")
     .option("--ip <ip>", "Filter by IP address")
     .option("--os <os>", "Filter by OS string")
-    .option(
-      "--risk <level>",
-      "Filter by risk level (critical, high, medium, low, none)"
-    )
+    .option("--risk <level>", "Filter by risk level (critical, high, medium, low, none)")
     .option("--status <status>", "Filter by status (active, inactive, unknown)")
     .option("--scan-type <type>", "Filter by scan type (agent, agentless, network_edge)")
     .option("--tags <tags>", "Filter by tag(s), comma-separated")
     .option("--sort <column>", "Sort column (e.g. name, riskLevel, lastSeen)")
     .option("--sort-dir <dir>", "Sort direction: ascending or descending", "ascending")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
-    .action(async (opts: {
-      name?: string; ip?: string; os?: string; risk?: string;
-      status?: string; scanType?: string; tags?: string;
-      sort?: string; sortDir?: string; output: string;
-    }) => {
-      try {
-        const devices = await getClient().listDevices({
-          name: opts.name,
-          ip: opts.ip,
-          os: opts.os,
-          riskLevel: opts.risk as DeviceListing["riskLevel"],
-          status: opts.status as DeviceListing["status"],
-          scanType: opts.scanType as DeviceListing["scanType"],
-          tags: opts.tags,
-          sortColumn: opts.sort,
-          sortDirection: opts.sortDir as "ascending" | "descending",
-        });
-        printTable(devices.map(deviceListingToRow), LIST_COLUMNS, opts.output as OutputFormat);
-      } catch (err) { handleError(err); }
-    });
+    .action(
+      async (opts: {
+        name?: string;
+        ip?: string;
+        os?: string;
+        risk?: string;
+        status?: string;
+        scanType?: string;
+        tags?: string;
+        sort?: string;
+        sortDir?: string;
+        output: string;
+      }) => {
+        try {
+          const devices = await getClient().listDevices({
+            name: opts.name,
+            ip: opts.ip,
+            os: opts.os,
+            riskLevel: opts.risk as DeviceListing["riskLevel"],
+            status: opts.status as DeviceListing["status"],
+            scanType: opts.scanType as DeviceListing["scanType"],
+            tags: opts.tags,
+            sortColumn: opts.sort,
+            sortDirection: opts.sortDir as "ascending" | "descending",
+          });
+          printTable(devices.map(deviceListingToRow), LIST_COLUMNS, opts.output as OutputFormat);
+        } catch (err) {
+          handleError(err);
+        }
+      }
+    );
 
   // ── get ───────────────────────────────────────────────────────────────────
   const get = devices
@@ -127,7 +129,7 @@ export function registerDevicesCommands(
     .description("General overview (default)")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { output: string }, cmd: Command) => {
-      const id = parseInt((cmd.parent!.args[0] ?? ""), 10);
+      const id = parseInt(cmd.parent!.args[0] ?? "", 10);
       await fetchAndPrint(id, "overview", getClient, opts.output as OutputFormat);
     });
 
@@ -136,7 +138,7 @@ export function registerDevicesCommands(
     .description("Operating system information")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { output: string }, cmd: Command) => {
-      const id = parseInt((cmd.parent!.args[0] ?? ""), 10);
+      const id = parseInt(cmd.parent!.args[0] ?? "", 10);
       await fetchAndPrint(id, "os", getClient, opts.output as OutputFormat);
     });
 
@@ -145,7 +147,7 @@ export function registerDevicesCommands(
     .description("Users associated with the device")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { output: string }, cmd: Command) => {
-      const id = parseInt((cmd.parent!.args[0] ?? ""), 10);
+      const id = parseInt(cmd.parent!.args[0] ?? "", 10);
       await fetchAndPrint(id, "users", getClient, opts.output as OutputFormat);
     });
 
@@ -156,7 +158,7 @@ export function registerDevicesCommands(
     .option("--search <text>", "Search term")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { state?: string; search?: string; output: string }, cmd: Command) => {
-      const id = parseInt((cmd.parent!.args[0] ?? ""), 10);
+      const id = parseInt(cmd.parent!.args[0] ?? "", 10);
       await fetchAndPrint(id, "vulnerabilities", getClient, opts.output as OutputFormat, opts);
     });
 
@@ -213,7 +215,9 @@ async function fetchAndPrint(
         format
       );
     }
-  } catch (err) { handleError(err); }
+  } catch (err) {
+    handleError(err);
+  }
 }
 
 function handleError(err: unknown): never {

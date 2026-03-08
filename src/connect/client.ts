@@ -129,11 +129,7 @@ export class PDQConnectClient {
       // Single page
       params["page"] = opts.page;
       params["pageSize"] = opts.pageSize ?? PAGE_SIZE;
-      const res = await this.request<ListResponse<Device>>(
-        "GET",
-        "/v1/api/devices",
-        params
-      );
+      const res = await this.request<ListResponse<Device>>("GET", "/v1/api/devices", params);
       return res.data;
     }
 
@@ -141,10 +137,7 @@ export class PDQConnectClient {
   }
 
   async getDevice(deviceId: string): Promise<Device> {
-    const res = await this.request<SingleResponse<Device>>(
-      "GET",
-      `/v1/api/devices/${deviceId}`
-    );
+    const res = await this.request<SingleResponse<Device>>("GET", `/v1/api/devices/${deviceId}`);
     return res.data;
   }
 
@@ -181,10 +174,7 @@ export class PDQConnectClient {
   }
 
   async getPackage(packageId: string): Promise<Package> {
-    const res = await this.request<SingleResponse<Package>>(
-      "GET",
-      `/v1/api/packages/${packageId}`
-    );
+    const res = await this.request<SingleResponse<Package>>("GET", `/v1/api/packages/${packageId}`);
     return res.data;
   }
 
@@ -192,10 +182,7 @@ export class PDQConnectClient {
   // Deployments
   // -----------------------------------------------------------------------
 
-  async createDeployment(
-    packageId: string,
-    targetIds: string[]
-  ): Promise<void> {
+  async createDeployment(packageId: string, targetIds: string[]): Promise<void> {
     await this.request<undefined>("POST", "/v1/api/deployments", {
       package: packageId,
       targets: targetIds.join(","),

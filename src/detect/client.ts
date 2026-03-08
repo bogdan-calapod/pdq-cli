@@ -137,24 +137,15 @@ export class PDQDetectClient {
   }
 
   async getDeviceOverview(deviceId: number): Promise<DeviceOverview> {
-    return this.request<DeviceOverview>(
-      "GET",
-      `/console/elements/device/${deviceId}/overview/`
-    );
+    return this.request<DeviceOverview>("GET", `/console/elements/device/${deviceId}/overview/`);
   }
 
   async getDeviceOS(deviceId: number): Promise<DeviceOS> {
-    return this.request<DeviceOS>(
-      "GET",
-      `/console/elements/device/${deviceId}/os/`
-    );
+    return this.request<DeviceOS>("GET", `/console/elements/device/${deviceId}/os/`);
   }
 
   async getDeviceUsers(deviceId: number): Promise<DeviceUser[]> {
-    return this.request<DeviceUser[]>(
-      "GET",
-      `/console/elements/device/${deviceId}/users/`
-    );
+    return this.request<DeviceUser[]>("GET", `/console/elements/device/${deviceId}/users/`);
   }
 
   async getDeviceVulnerabilities(
@@ -172,9 +163,7 @@ export class PDQDetectClient {
     );
   }
 
-  async getDeviceApplications(
-    deviceId: number
-  ): Promise<Paginated<ApplicationListing>> {
+  async getDeviceApplications(deviceId: number): Promise<Paginated<ApplicationListing>> {
     return this.request<Paginated<ApplicationListing>>(
       "GET",
       `/console/elements/device/${deviceId}/applications/`
@@ -185,9 +174,7 @@ export class PDQDetectClient {
   // Applications
   // -----------------------------------------------------------------------
 
-  async listApplications(
-    opts: ApplicationListOptions = {}
-  ): Promise<ApplicationListing[]> {
+  async listApplications(opts: ApplicationListOptions = {}): Promise<ApplicationListing[]> {
     return this.getAll<ApplicationListing>(
       "/console/elements/applications/",
       {
@@ -214,9 +201,7 @@ export class PDQDetectClient {
   // Vulnerabilities (CVE Manager)
   // -----------------------------------------------------------------------
 
-  async listVulnerabilities(
-    opts: CveListOptions = {}
-  ): Promise<CveListing[]> {
+  async listVulnerabilities(opts: CveListOptions = {}): Promise<CveListing[]> {
     return this.getAll<CveListing>(
       "/console/reporting/cveManager/",
       {
@@ -235,9 +220,7 @@ export class PDQDetectClient {
   // Scan Surface
   // -----------------------------------------------------------------------
 
-  async listScanSurface(
-    opts: ScanSurfaceListOptions = {}
-  ): Promise<ScanSurfaceEntry[]> {
+  async listScanSurface(opts: ScanSurfaceListOptions = {}): Promise<ScanSurfaceEntry[]> {
     return this.getAll<ScanSurfaceEntry>(
       "/console/scanSurface/",
       {
@@ -272,10 +255,7 @@ export class PDQDetectClient {
     );
   }
 
-  async deleteScanSurface(
-    userInputIds: number[],
-    deleteAssets = false
-  ): Promise<void> {
+  async deleteScanSurface(userInputIds: number[], deleteAssets = false): Promise<void> {
     return this.request<void>("DELETE", "/console/scanSurface/", {
       userInputsIds: userInputIds.join(","),
       deleteAssets: deleteAssets ? "true" : undefined,

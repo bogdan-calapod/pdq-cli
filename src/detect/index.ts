@@ -1,11 +1,6 @@
 import { type Command } from "commander";
 import { PDQDetectClient } from "./client.js";
-import {
-  getDetectApiKey,
-  getDetectBaseUrl,
-  setDetectApiKey,
-  setDetectBaseUrl,
-} from "../config.js";
+import { getDetectApiKey, getDetectBaseUrl, setDetectApiKey, setDetectBaseUrl } from "../config.js";
 import { registerDevicesCommands } from "./devices.js";
 import { registerVulnerabilitiesCommands } from "./vulnerabilities.js";
 import { registerApplicationsCommands } from "./applications.js";
@@ -28,9 +23,7 @@ export function registerDetectCommand(program: Command): void {
   };
 
   // ── config ────────────────────────────────────────────────────────────────
-  const config = detect
-    .command("config")
-    .description("Manage PDQ Detect CLI configuration");
+  const config = detect.command("config").description("Manage PDQ Detect CLI configuration");
 
   config
     .command("set-key <apiKey>")

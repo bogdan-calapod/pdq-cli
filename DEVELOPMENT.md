@@ -25,21 +25,29 @@ npm run build
 node dist/index.js --help
 ```
 
-## Linting
+## Linting & Formatting
 
-ESLint is configured with TypeScript support (`eslint.config.mjs`). A pre-commit hook runs automatically via Husky + lint-staged.
+ESLint and Prettier are configured for consistent code style. A pre-commit hook runs automatically via Husky + lint-staged.
 
 ```sh
-npm run lint       # check for issues
-npm run lint:fix   # auto-fix what's possible
+npm run lint          # check for lint issues
+npm run lint:fix      # auto-fix lint issues
+npm run format        # format all files with Prettier
+npm run format:check  # check formatting without writing
 ```
 
-Key rules enforced:
+ESLint rules enforced:
+
 - No unused variables/imports (prefix with `_` to ignore)
 - Consistent type imports (`import type` for type-only imports)
 - No floating promises
 - No explicit `any` (warning)
 - Non-null assertions flagged as warnings
+
+Prettier config (`.prettierrc`):
+
+- Double quotes, semicolons, trailing commas (ES5)
+- 2-space indentation, 100 char line width
 
 ## Building binaries
 

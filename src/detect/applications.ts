@@ -28,21 +28,11 @@ export function registerApplicationsCommands(
     .command("list")
     .description("List all discovered applications")
     .option("-f, --filter <text>", "Text filter (name, publisher, ...)")
-    .option(
-      "--risk <level>",
-      "Filter by risk level (critical, high, medium, low, none)"
-    )
-    .option(
-      "--scan-type <type>",
-      "Filter by scan type (agent, agentless, network_edge)"
-    )
+    .option("--risk <level>", "Filter by risk level (critical, high, medium, low, none)")
+    .option("--scan-type <type>", "Filter by scan type (agent, agentless, network_edge)")
     .option("--status <status>", "Filter by status (active, inactive, unknown)")
     .option("--sort <column>", "Sort column (e.g. name, riskLevel, deviceCount)")
-    .option(
-      "--sort-dir <dir>",
-      "Sort direction: ascending or descending",
-      "ascending"
-    )
+    .option("--sort-dir <dir>", "Sort direction: ascending or descending", "ascending")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(
       async (opts: {
