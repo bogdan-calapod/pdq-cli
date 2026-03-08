@@ -23,11 +23,13 @@ A command-line interface for PDQ products, written in TypeScript.
 brew install bogdan-calapod/tap/pdq-cli
 ```
 
-### <img src="./assets/logo-windows.svg" height="16" valign="middle"> Windows (winget)
+### <img src="./assets/logo-windows.svg" height="16" valign="middle"> Windows (winget) — coming soon
 
 ```powershell
 winget install BogdanCalapod.pdq-cli
 ```
+
+_Pending approval: [microsoft/winget-pkgs#346299](https://github.com/microsoft/winget-pkgs/pull/346299)_
 
 ### Manual download
 

@@ -129,16 +129,16 @@ jobs:
             artifacts/pdq-macos-x64/pdq-macos-x64
             artifacts/pdq-windows-x64.exe/pdq-windows-x64.exe
           generate_release_notes: true
-
-  winget:
-    name: Publish to winget
-    needs: release
-    runs-on: windows-latest
-
-    steps:
-      - name: Publish to winget
-        uses: vedantmgoyal9/winget-releaser@main
-        with:
-          identifier: BogdanCalapod.pdq-cli
-          installers-regex: 'pdq-windows-x64\.exe$'
-          token: ${{ secrets.WINGET_TOKEN }}
+  #
+  # winget:
+  #   name: Publish to winget
+  #   needs: release
+  #   runs-on: windows-latest
+  #
+  #   steps:
+  #     - name: Publish to winget
+  #       uses: vedantmgoyal9/winget-releaser@main
+  #       with:
+  #         identifier: BogdanCalapod.pdq-cli
+  #         installers-regex: 'pdq-windows-x64\.exe$'
+  #         token: ${{ secrets.WINGET_TOKEN }}
