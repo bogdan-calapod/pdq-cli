@@ -273,6 +273,4 @@ See [DEVELOPMENT.md](./DEVELOPMENT.md) for build instructions, project structure
 
 MIT
 
----
-
 <sub>Built with the assistance of AI (Claude by Anthropic).</sub>
