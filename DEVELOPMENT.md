@@ -55,10 +55,18 @@ Binaries are produced by [`@yao-pkg/pkg`](https://github.com/nicolo-ribaudo/pkg)
 
 ```sh
 npm run build
-npm run pkg:linux    # dist/pdq-linux   (x64)
-npm run pkg:macos    # dist/pdq-macos   (ARM64)
-npm run pkg:windows  # dist/pdq-windows.exe (x64)
-npm run pkg:all      # all three
+
+# Linux
+npm run pkg:linux-x64      # dist/pdq-linux-x64
+npm run pkg:linux-arm64    # dist/pdq-linux-arm64
+
+# macOS
+npm run pkg:macos-arm64    # dist/pdq-macos-arm64 (Apple Silicon)
+npm run pkg:macos-x64      # dist/pdq-macos-x64   (Intel)
+
+# Windows
+npm run pkg:windows-x64    # dist/pdq-windows-x64.exe
+npm run pkg:windows-arm64  # dist/pdq-windows-arm64.exe
 ```
 
 ## Releasing
