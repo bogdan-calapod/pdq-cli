@@ -1,3 +1,9 @@
+<div align="center">
+  <img src="./assets/pdq-logo.svg" height="48" alt="PDQ logo">
+  <br>
+  <sub>Unofficial — not affiliated with or endorsed by PDQ.com</sub>
+</div>
+
 # pdq-cli
 
 A command-line interface for PDQ products, written in TypeScript.
@@ -6,8 +12,8 @@ A command-line interface for PDQ products, written in TypeScript.
 
 | Sub-command | Product |
 |---|---|
-| `pdq connect` | [PDQ Connect](https://www.pdq.com/pdq-connect/) — cloud endpoint management |
-| `pdq detect` | [PDQ Detect](https://www.pdq.com/pdq-detect/) — vulnerability and risk management |
+| `pdq connect` | <img src="https://images.ctfassets.net/xwxknivhjv1b/5w5RibUZmOYIkBp38T0T3T/4407353331280c7df23d6c30ec73c31a/PDQ_Connect_icon_nav.svg" height="16" valign="middle"> [PDQ Connect](https://www.pdq.com/pdq-connect/) — cloud endpoint management |
+| `pdq detect` | <img src="https://images.ctfassets.net/xwxknivhjv1b/5dT1851qNyntmKDcX3sBYG/126512b65cad5f5a3df43dc87d1be682/PDQ_Detect_icon_nav.svg" height="16" valign="middle"> [PDQ Detect](https://www.pdq.com/pdq-detect/) — vulnerability and risk management |
 
 ## Installation
 
@@ -17,9 +23,9 @@ Grab the latest binary for your platform from the [Releases](../../releases) pag
 
 | Platform | File |
 |---|---|
-| Linux (x64) | `pdq-linux-x64` |
-| macOS (x64) | `pdq-macos-x64` |
-| Windows (x64) | `pdq-windows-x64.exe` |
+| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (x64) | `pdq-linux-x64` |
+| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (x64) | `pdq-macos-x64` |
+| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (x64) | `pdq-windows-x64.exe` |
 
 **Linux:**
 ```sh
