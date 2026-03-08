@@ -17,7 +17,19 @@ A command-line interface for PDQ products, written in TypeScript.
 
 ## Installation
 
-### Download a pre-built binary
+### <img src="./assets/logo-macos.svg" height="16" valign="middle"> macOS / <img src="./assets/logo-linux.svg" height="16" valign="middle"> Linux (Homebrew)
+
+```sh
+brew install bogdan-calapod/tap/pdq-cli
+```
+
+### <img src="./assets/logo-windows.svg" height="16" valign="middle"> Windows (winget)
+
+```powershell
+winget install BogdanCalapod.pdq-cli
+```
+
+### Manual download
 
 Grab the latest binary for your platform from the [Releases](../../releases) page — no Node.js required.
 
@@ -29,7 +41,8 @@ Grab the latest binary for your platform from the [Releases](../../releases) pag
 | <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (ARM64)   | `pdq-macos-arm64`     |
 | <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (x64) | `pdq-windows-x64.exe` |
 
-**Linux:**
+<details>
+<summary><strong>Linux install steps</strong></summary>
 
 ```sh
 # x64
@@ -41,7 +54,10 @@ chmod +x pdq-linux-arm64
 sudo mv pdq-linux-arm64 /usr/local/bin/pdq
 ```
 
-**macOS:**
+</details>
+
+<details>
+<summary><strong>macOS install steps</strong></summary>
 
 ```sh
 # Apple Silicon (M1/M2/M3)
@@ -53,35 +69,31 @@ chmod +x pdq-macos-x64
 sudo mv pdq-macos-x64 /usr/local/bin/pdq
 ```
 
-> [!NOTE]
-> **macOS Gatekeeper:** The binary is not notarized (Apple notarization requires a paid Developer account). macOS will block it on first run with _"cannot be opened because the developer cannot be verified"_.
->
-> To allow it, remove the quarantine attribute that macOS sets on files downloaded from the internet:
->
-> ```sh
-> xattr -d com.apple.quarantine pdq-macos-arm64  # or pdq-macos-x64
-> ```
->
-> You only need to do this once, before moving the binary to your PATH.
->
-> Alternatively, open **System Settings → Privacy & Security**, scroll down to the blocked app notice, and click **Allow Anyway**.
+**Note — macOS Gatekeeper:** The binary is not notarized (Apple notarization requires a paid Developer account). macOS will block it on first run with _"cannot be opened because the developer cannot be verified"_.
 
-**Windows (manual):**
+To allow it, remove the quarantine attribute:
+
+```sh
+xattr -d com.apple.quarantine pdq-macos-arm64  # or pdq-macos-x64
+```
+
+You only need to do this once, before moving the binary to your PATH. Alternatively, open **System Settings → Privacy & Security**, scroll down to the blocked app notice, and click **Allow Anyway**.
+
+</details>
+
+<details>
+<summary><strong>Windows install steps</strong></summary>
 
 Download `pdq-windows-x64.exe`, rename to `pdq.exe`, and move to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**. Windows ARM devices can run the x64 binary via emulation.
 
-**Windows (winget):**
-
-```powershell
-winget install BogdanCalapod.pdq-cli
-```
+</details>
 
 ### Run from source
 
 Requires Node.js 22+.
 
 ```sh
-git clone https://github.com/your-username/pdq-cli
+git clone https://github.com/bogdan-calapod/pdq-cli
 cd pdq-cli
 npm install
 npm run build
