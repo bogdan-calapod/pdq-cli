@@ -7,8 +7,7 @@ A command-line interface for PDQ products, written in TypeScript.
 | Sub-command | Product |
 |---|---|
 | `pdq connect` | [PDQ Connect](https://www.pdq.com/pdq-connect/) — cloud endpoint management |
-
-> `pdq detect` coming soon.
+| `pdq detect` | [PDQ Detect](https://www.pdq.com/pdq-detect/) — vulnerability and risk management |
 
 ## Installation
 
@@ -65,21 +64,44 @@ npm link
 
 ## Authentication
 
-PDQ Connect uses Bearer token auth. Provide your API key in either of these ways (env var takes priority):
+### PDQ Connect
 
-**Environment variable:**
+PDQ Connect uses Bearer token auth. Provide your API key via env var (takes priority) or save it to the config file:
+
 ```sh
 export PDQ_CONNECT_API_KEY=your_api_key_here
-```
-
-**Config file** (persisted to `$XDG_CONFIG_HOME/pdqcli/config.json`, defaulting to `~/.config/pdqcli/config.json`):
-```sh
+# or persist it:
 pdq connect config set-key your_api_key_here
 ```
 
 Generate an API key in PDQ Connect under **Settings → API Keys**.
 
+### PDQ Detect
+
+PDQ Detect uses a `FootprintApiKey` header. Provide your key via env var or config file:
+
+```sh
+export PDQ_DETECT_API_KEY=your_api_key_here
+# or persist it:
+pdq detect config set-key your_api_key_here
+```
+
+The base URL defaults to `https://detect.pdq.com`. Override it if needed:
+
+```sh
+export PDQ_DETECT_URL=https://your-instance.example.com
+# or persist it:
+pdq detect config set-url https://your-instance.example.com
+# or pass it inline:
+pdq detect --url https://your-instance.example.com devices list
+```
+
 ## Commands
+
+All list/get commands support `--output table|json|csv` (default: `table`).
+
+<details>
+<summary><strong>pdq connect</strong></summary>
 
 ### `pdq connect devices`
 
@@ -117,23 +139,6 @@ pdq connect packages list --filter name=~Firefox
 pdq connect packages get pkg_abc123
 ```
 
-### `pdq get-skill`
-
-Prints a `SKILL.md` file that tells AI coding assistants how to use this CLI — what commands exist, what flags they accept, and example invocations.
-
-```sh
-# Print to stdout (pipe into your AI tool or inspect it)
-pdq get-skill
-
-# Write directly to the OpenCode skills directory
-pdq get-skill --out .opencode/skills/pdq-cli/SKILL.md
-
-# Or any other AI assistant location
-pdq get-skill --out .claude/skills/pdq-cli/SKILL.md
-```
-
----
-
 ### `pdq connect deployments`
 
 ```sh
@@ -143,54 +148,84 @@ pdq connect deployments create \
   --targets dvc_abc123,grp_xyz456
 ```
 
-### Global `--output` flag
+</details>
 
-All list/get commands support `--output table|json|csv` (default: `table`).
+<details>
+<summary><strong>pdq detect</strong></summary>
 
-## Development
-
-```sh
-npm run dev -- connect devices list   # run via tsx (no build step)
-npm run build                          # compile TS → dist/
-```
-
-### Building binaries locally
+### `pdq detect devices`
 
 ```sh
-npm run build
-npm run pkg:linux    # dist/pdq-linux-x64
-npm run pkg:macos    # dist/pdq-macos-x64
-npm run pkg:windows  # dist/pdq-windows-x64.exe
-npm run pkg:all      # all three
+# List all discovered devices
+pdq detect devices list
+
+# Filter
+pdq detect devices list --os Windows --risk critical
+pdq detect devices list --status active --scan-type agent
+pdq detect devices list --tags "server,production"
+
+# Sort
+pdq detect devices list --sort riskLevel --sort-dir descending
+
+# Get a single device (numeric ID)
+pdq detect devices get 42
+pdq detect devices get 42 os
+pdq detect devices get 42 users
+pdq detect devices get 42 vulnerabilities --state open
 ```
 
-### Releasing
-
-Push a version tag to trigger the GitHub Actions build:
+### `pdq detect vulnerabilities` (alias: `vulns`)
 
 ```sh
-git tag v0.1.0
-git push origin v0.1.0
+pdq detect vulnerabilities list
+pdq detect vulns list --open-only
+pdq detect vulns list --filter Log4j --filter-col summary
+pdq detect vulns list --sort cvssBase --sort-dir descending --output json
 ```
 
-The workflow builds Linux, macOS, and Windows executables and attaches them to the GitHub Release automatically.
+### `pdq detect applications` (alias: `apps`)
 
-## Project structure
+```sh
+pdq detect applications list
+pdq detect apps list --risk critical
+pdq detect apps list --filter Firefox --sort deviceCount --sort-dir descending
+pdq detect apps get 123
+```
 
+### `pdq detect scan-surface`
+
+```sh
+# List scan targets
+pdq detect scan-surface list
+
+# Add IPs, hostnames, or CIDR ranges (triggers a scan immediately)
+pdq detect scan-surface add 192.168.1.0/24
+pdq detect scan-surface add host1.corp.local host2.corp.local --no-scan
+
+# Trigger a full rescan
+pdq detect scan-surface rescan
+
+# Remove entries
+pdq detect scan-surface delete 7 8 --delete-assets
 ```
-src/
-├── index.ts               # Entry point, registers sub-CLIs
-├── config.ts              # API key resolution (env var / XDG config)
-├── output.ts              # table / json / csv formatter
-└── connect/
-    ├── index.ts           # `pdq connect` sub-program
-    ├── client.ts          # Typed fetch-based API client
-    ├── types.ts           # TypeScript types from PDQ Connect OpenAPI spec
-    ├── devices.ts         # devices list / get
-    ├── groups.ts          # groups list
-    ├── packages.ts        # packages list / get
-    └── deployments.ts     # deployments create
+
+</details>
+
+### `pdq get-skill`
+
+Prints a `SKILL.md` file that tells AI coding assistants how to use this CLI.
+
+```sh
+# Print to stdout
+pdq get-skill
+
+# Write directly to the OpenCode skills directory
+pdq get-skill --out .opencode/skills/pdq-cli/SKILL.md
 ```
+
+## Contributing
+
+See [DEVELOPMENT.md](./DEVELOPMENT.md) for build instructions, project structure, and release process.
 
 ## License
 

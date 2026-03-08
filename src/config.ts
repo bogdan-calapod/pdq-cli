@@ -7,6 +7,8 @@ const CONFIG_FILE_NAME = "config.json";
 
 interface ConfigFile {
   connectApiKey?: string;
+  detectApiKey?: string;
+  detectBaseUrl?: string;
 }
 
 function getConfigFilePath(): string {
@@ -25,13 +27,22 @@ function readConfigFile(): ConfigFile {
   }
 }
 
+function writeConfigFile(data: ConfigFile): void {
+  const filePath = getConfigFilePath();
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + "\n", "utf-8");
+  console.log(`Config saved to ${filePath}`);
+}
+
+// ---------------------------------------------------------------------------
+// PDQ Connect
+// ---------------------------------------------------------------------------
+
 /**
  * Resolve the PDQ Connect API key.
  * Priority:
  *   1. PDQ_CONNECT_API_KEY environment variable
  *   2. connectApiKey in $XDG_CONFIG_HOME/pdqcli/config.json
- *
- * Exits with a clear error if neither is set.
  */
 export function getConnectApiKey(): string {
   const fromEnv = process.env["PDQ_CONNECT_API_KEY"];
@@ -53,18 +64,63 @@ export function getConnectApiKey(): string {
   process.exit(1);
 }
 
-/**
- * Persist the PDQ Connect API key to the XDG config file.
- */
 export function setConnectApiKey(apiKey: string): void {
-  const filePath = getConfigFilePath();
-  const dir = path.dirname(filePath);
+  writeConfigFile({ ...readConfigFile(), connectApiKey: apiKey });
+}
 
-  fs.mkdirSync(dir, { recursive: true });
+// ---------------------------------------------------------------------------
+// PDQ Detect
+// ---------------------------------------------------------------------------
 
-  const existing = readConfigFile();
-  const updated: ConfigFile = { ...existing, connectApiKey: apiKey };
-  fs.writeFileSync(filePath, JSON.stringify(updated, null, 2) + "\n", "utf-8");
+export const DETECT_DEFAULT_BASE_URL = "https://detect.pdq.com";
 
-  console.log(`API key saved to ${filePath}`);
+/**
+ * Resolve the PDQ Detect API key.
+ * Priority:
+ *   1. PDQ_DETECT_API_KEY environment variable
+ *   2. detectApiKey in $XDG_CONFIG_HOME/pdqcli/config.json
+ */
+export function getDetectApiKey(): string {
+  const fromEnv = process.env["PDQ_DETECT_API_KEY"];
+  if (fromEnv?.trim()) return fromEnv.trim();
+
+  const fromFile = readConfigFile().detectApiKey;
+  if (fromFile?.trim()) return fromFile.trim();
+
+  console.error(
+    [
+      "Error: PDQ Detect API key not found.",
+      "",
+      "Provide it in one of two ways:",
+      "  1. Set the PDQ_DETECT_API_KEY environment variable",
+      `  2. Run: pdq detect config set-key <apiKey>`,
+      `     (stores in ${getConfigFilePath()})`,
+    ].join("\n")
+  );
+  process.exit(1);
+}
+
+export function setDetectApiKey(apiKey: string): void {
+  writeConfigFile({ ...readConfigFile(), detectApiKey: apiKey });
+}
+
+/**
+ * Resolve the PDQ Detect base URL.
+ * Priority:
+ *   1. --url flag passed at runtime (callers handle this)
+ *   2. PDQ_DETECT_URL environment variable
+ *   3. detectBaseUrl in config file
+ *   4. DETECT_DEFAULT_BASE_URL ("https://detect.pdq.com")
+ */
+export function getDetectBaseUrl(flagValue?: string): string {
+  if (flagValue?.trim()) return flagValue.trim().replace(/\/$/, "");
+  const fromEnv = process.env["PDQ_DETECT_URL"];
+  if (fromEnv?.trim()) return fromEnv.trim().replace(/\/$/, "");
+  const fromFile = readConfigFile().detectBaseUrl;
+  if (fromFile?.trim()) return fromFile.trim().replace(/\/$/, "");
+  return DETECT_DEFAULT_BASE_URL;
+}
+
+export function setDetectBaseUrl(url: string): void {
+  writeConfigFile({ ...readConfigFile(), detectBaseUrl: url });
 }

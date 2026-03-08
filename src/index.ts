@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import { Command } from "commander";
 import { registerConnectCommand } from "./connect/index.js";
+import { registerDetectCommand } from "./detect/index.js";
 import { SKILL_CONTENT } from "./skill.js";
 
 const program = new Command();
@@ -14,6 +15,7 @@ program
   .version("0.1.0");
 
 registerConnectCommand(program);
+registerDetectCommand(program);
 
 program
   .command("get-skill")
