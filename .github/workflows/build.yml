@@ -19,17 +19,17 @@ jobs:
           - target: linux
             runner: ubuntu-latest
             pkg_target: node22-linux-x64
-            artifact_name: pdq-linux-x64
+            artifact_name: pdq-linux
 
           - target: macos
             runner: macos-latest
-            pkg_target: node22-macos-x64
-            artifact_name: pdq-macos-x64
+            pkg_target: node22-macos-arm64
+            artifact_name: pdq-macos
 
           - target: windows
             runner: windows-latest
             pkg_target: node22-win-x64
-            artifact_name: pdq-windows-x64.exe
+            artifact_name: pdq-windows.exe
 
     steps:
       - name: Checkout
@@ -86,7 +86,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            artifacts/pdq-linux-x64/pdq-linux-x64
-            artifacts/pdq-macos-x64/pdq-macos-x64
-            artifacts/pdq-windows-x64.exe/pdq-windows-x64.exe
+            artifacts/pdq-linux/pdq-linux
+            artifacts/pdq-macos/pdq-macos
+            artifacts/pdq-windows.exe/pdq-windows.exe
           generate_release_notes: true

@@ -94,7 +94,7 @@ npm run pkg:all        # produce all three platform binaries in dist/
 
 Releases are triggered by pushing a `v*` tag. The GitHub Actions workflow (`.github/workflows/build.yml`) runs three matrix jobs (linux, macos, windows), uploads artifacts, then a final `release` job attaches all three binaries to the GitHub Release via `softprops/action-gh-release`.
 
-Binary names: `pdq-linux-x64`, `pdq-macos-x64`, `pdq-windows-x64.exe`.
+Binary names: `pdq-linux`, `pdq-macos`, `pdq-windows.exe`.
 
 ## What to avoid
 

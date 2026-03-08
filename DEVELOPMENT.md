@@ -31,9 +31,9 @@ Binaries are produced by [`@yao-pkg/pkg`](https://github.com/nicolo-ribaudo/pkg)
 
 ```sh
 npm run build
-npm run pkg:linux    # dist/pdq-linux-x64
-npm run pkg:macos    # dist/pdq-macos-x64
-npm run pkg:windows  # dist/pdq-windows-x64.exe
+npm run pkg:linux    # dist/pdq-linux   (x64)
+npm run pkg:macos    # dist/pdq-macos   (ARM64)
+npm run pkg:windows  # dist/pdq-windows.exe (x64)
 npm run pkg:all      # all three
 ```
 

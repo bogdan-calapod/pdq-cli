@@ -23,20 +23,20 @@ Grab the latest binary for your platform from the [Releases](../../releases) pag
 
 | Platform | File |
 |---|---|
-| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (x64) | `pdq-linux-x64` |
-| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (x64) | `pdq-macos-x64` |
-| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (x64) | `pdq-windows-x64.exe` |
+| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux | `pdq-linux` |
+| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS | `pdq-macos` |
+| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows | `pdq-windows.exe` |
 
 **Linux:**
 ```sh
-chmod +x pdq-linux-x64
-sudo mv pdq-linux-x64 /usr/local/bin/pdq
+chmod +x pdq-linux
+sudo mv pdq-linux /usr/local/bin/pdq
 ```
 
 **macOS:**
 ```sh
-chmod +x pdq-macos-x64
-sudo mv pdq-macos-x64 /usr/local/bin/pdq
+chmod +x pdq-macos
+sudo mv pdq-macos /usr/local/bin/pdq
 ```
 
 > [!NOTE]
@@ -44,7 +44,7 @@ sudo mv pdq-macos-x64 /usr/local/bin/pdq
 >
 > To allow it, remove the quarantine attribute that macOS sets on files downloaded from the internet:
 > ```sh
-> xattr -d com.apple.quarantine pdq-macos-x64
+> xattr -d com.apple.quarantine pdq-macos
 > ```
 > You only need to do this once, before moving the binary to your PATH.
 >
@@ -52,7 +52,7 @@ sudo mv pdq-macos-x64 /usr/local/bin/pdq
 
 **Windows:**
 
-Rename `pdq-windows-x64.exe` to `pdq.exe` and move it to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**.
+Rename `pdq-windows.exe` to `pdq.exe` and move it to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**.
 
 ### Run from source
 
