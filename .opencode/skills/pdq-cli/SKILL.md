@@ -85,14 +85,30 @@ Config file location: `$XDG_CONFIG_HOME/pdqcli/config.json` (falls back to `~/.c
 
 `set*` helpers in `config.ts` write/merge the config file and create the directory if needed.
 
+## Linting
+
+ESLint with TypeScript support is configured in `eslint.config.mjs`. A pre-commit hook (Husky + lint-staged) runs `eslint --fix` on staged files automatically.
+
+```sh
+npm run lint       # check for issues
+npm run lint:fix   # auto-fix what's possible
+```
+
+Key rules:
+- No unused variables/imports (use `_` prefix to ignore intentionally)
+- Consistent type imports (`import type` for type-only)
+- No floating promises
+- Non-null assertions warned
+
 ## Build & release
 
 ```sh
+npm run lint           # lint first (CI does this)
 npm run build          # tsc → dist/
 npm run pkg:all        # produce all three platform binaries in dist/
 ```
 
-Releases are triggered by pushing a `v*` tag. The GitHub Actions workflow (`.github/workflows/build.yml`) runs three matrix jobs (linux, macos, windows), uploads artifacts, then a final `release` job attaches all three binaries to the GitHub Release via `softprops/action-gh-release`.
+Releases are triggered by pushing a `v*` tag. The GitHub Actions workflow (`.github/workflows/build.yml`) runs lint, then three matrix jobs (linux, macos, windows), uploads artifacts, then a final `release` job attaches all three binaries to the GitHub Release via `softprops/action-gh-release`.
 
 Binary names: `pdq-linux`, `pdq-macos`, `pdq-windows.exe`.
 

@@ -1,5 +1,5 @@
-import { Command } from "commander";
-import { PDQDetectClient, PDQDetectError } from "./client.js";
+import { type Command } from "commander";
+import { type PDQDetectClient, PDQDetectError } from "./client.js";
 import { printTable, type OutputFormat } from "../output.js";
 
 const LIST_COLUMNS = [

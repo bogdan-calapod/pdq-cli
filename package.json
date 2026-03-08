@@ -2,6 +2,7 @@
   "name": "pdq-cli",
   "version": "0.1.0",
   "description": "CLI for PDQ products (Connect, Detect)",
+  "license": "MIT",
   "type": "commonjs",
   "main": "dist/index.js",
   "bin": {
@@ -10,20 +11,33 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "build": "tsc",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
     "pkg:linux": "pkg dist/index.js -t node22-linux-x64 -o dist/pdq-linux",
     "pkg:macos": "pkg dist/index.js -t node22-macos-arm64 -o dist/pdq-macos",
     "pkg:windows": "pkg dist/index.js -t node22-win-x64 -o dist/pdq-windows.exe",
-    "pkg:all": "npm run pkg:linux && npm run pkg:macos && npm run pkg:windows"
+    "pkg:all": "npm run pkg:linux && npm run pkg:macos && npm run pkg:windows",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "eslint --fix"
+    ]
   },
   "dependencies": {
     "cli-table3": "^0.6.5",
     "commander": "^14.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^22.0.0",
     "@yao-pkg/pkg": "^6.14.1",
+    "eslint": "^10.0.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.56.1"
   },
   "engines": {
     "node": ">=22.0.0"

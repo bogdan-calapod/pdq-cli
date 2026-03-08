@@ -25,6 +25,22 @@ npm run build
 node dist/index.js --help
 ```
 
+## Linting
+
+ESLint is configured with TypeScript support (`eslint.config.mjs`). A pre-commit hook runs automatically via Husky + lint-staged.
+
+```sh
+npm run lint       # check for issues
+npm run lint:fix   # auto-fix what's possible
+```
+
+Key rules enforced:
+- No unused variables/imports (prefix with `_` to ignore)
+- Consistent type imports (`import type` for type-only imports)
+- No floating promises
+- No explicit `any` (warning)
+- Non-null assertions flagged as warnings
+
 ## Building binaries
 
 Binaries are produced by [`@yao-pkg/pkg`](https://github.com/nicolo-ribaudo/pkg) (the maintained community fork of `pkg`), which bundles the compiled JS and the Node 22 runtime into a single executable.

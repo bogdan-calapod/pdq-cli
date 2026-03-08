@@ -1,5 +1,5 @@
-import { Command } from "commander";
-import { PDQConnectClient, PDQConnectError } from "./client.js";
+import { type Command } from "commander";
+import { type PDQConnectClient, PDQConnectError } from "./client.js";
 
 export function registerDeploymentsCommands(
   parent: Command,

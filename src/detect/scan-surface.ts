@@ -1,5 +1,5 @@
-import { Command } from "commander";
-import { PDQDetectClient, PDQDetectError } from "./client.js";
+import { type Command } from "commander";
+import { type PDQDetectClient, PDQDetectError } from "./client.js";
 import { printTable, type OutputFormat } from "../output.js";
 
 const LIST_COLUMNS = [
@@ -120,7 +120,7 @@ export function registerScanSurfaceCommands(
       const numIds = ids.map((id) => parseInt(id, 10));
       const invalid = numIds.filter(isNaN);
       if (invalid.length > 0) {
-        console.error(`Error: non-numeric IDs provided: ${ids.filter((_, i) => isNaN(numIds[i]!)).join(", ")}`);
+        console.error(`Error: non-numeric IDs provided: ${ids.filter((_, i) => isNaN(numIds[i])).join(", ")}`);
         process.exit(1);
       }
       try {

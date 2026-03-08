@@ -10,7 +10,7 @@ export type OutputFormat = "table" | "json" | "csv";
  * @param format  Output format
  */
 export function printTable(
-  rows: Record<string, unknown>[],
+  rows: Array<Record<string, unknown>>,
   columns: string[] | undefined,
   format: OutputFormat
 ): void {
@@ -23,7 +23,7 @@ export function printTable(
     return;
   }
 
-  const keys = columns ?? Object.keys(rows[0]!);
+  const keys = columns ?? Object.keys(rows[0]);
 
   if (format === "json") {
     // For JSON, print the full rows (not just selected columns) unless columns

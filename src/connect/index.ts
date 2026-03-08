@@ -1,4 +1,4 @@
-import { Command } from "commander";
+import { type Command } from "commander";
 import { PDQConnectClient } from "./client.js";
 import { getConnectApiKey, setConnectApiKey } from "../config.js";
 import { registerDevicesCommands } from "./devices.js";
