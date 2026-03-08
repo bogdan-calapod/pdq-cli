@@ -21,14 +21,13 @@ A command-line interface for PDQ products, written in TypeScript.
 
 Grab the latest binary for your platform from the [Releases](../../releases) page — no Node.js required.
 
-| Platform                                                                        | File                    |
-| ------------------------------------------------------------------------------- | ----------------------- |
-| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (x64)     | `pdq-linux-x64`         |
-| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (ARM64)   | `pdq-linux-arm64`       |
-| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (x64)     | `pdq-macos-x64`         |
-| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (ARM64)   | `pdq-macos-arm64`       |
-| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (x64) | `pdq-windows-x64.exe`   |
-| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (ARM) | `pdq-windows-arm64.exe` |
+| Platform                                                                        | File                  |
+| ------------------------------------------------------------------------------- | --------------------- |
+| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (x64)     | `pdq-linux-x64`       |
+| <img src="./assets/logo-linux.svg" height="14" valign="middle"> Linux (ARM64)   | `pdq-linux-arm64`     |
+| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (x64)     | `pdq-macos-x64`       |
+| <img src="./assets/logo-macos.svg" height="14" valign="middle"> macOS (ARM64)   | `pdq-macos-arm64`     |
+| <img src="./assets/logo-windows.svg" height="14" valign="middle"> Windows (x64) | `pdq-windows-x64.exe` |
 
 **Linux:**
 
@@ -69,7 +68,7 @@ sudo mv pdq-macos-x64 /usr/local/bin/pdq
 
 **Windows (manual):**
 
-Download `pdq-windows-x64.exe` (Intel/AMD) or `pdq-windows-arm64.exe` (ARM), rename to `pdq.exe`, and move to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**.
+Download `pdq-windows-x64.exe`, rename to `pdq.exe`, and move to a directory on your `PATH` (e.g. `C:\tools\`). Windows SmartScreen may show a warning on first run — click **More info → Run anyway**. Windows ARM devices can run the x64 binary via emulation.
 
 **Windows (winget):**
 

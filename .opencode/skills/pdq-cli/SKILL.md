@@ -117,7 +117,7 @@ npm run pkg:linux-x64  # or pkg:linux-arm64, pkg:macos-arm64, pkg:macos-x64, pkg
 
 Releases are triggered by pushing a `v*` tag. The GitHub Actions workflow (`.github/workflows/build.yml`) runs lint, then six matrix jobs (linux/macos/windows × x64/arm64), uploads artifacts, then a `release` job attaches all binaries to the GitHub Release. A `winget` job submits the Windows binaries to winget-pkgs.
 
-Binary names: `pdq-linux-x64`, `pdq-linux-arm64`, `pdq-macos-arm64`, `pdq-macos-x64`, `pdq-windows-x64.exe`, `pdq-windows-arm64.exe`.
+Binary names: `pdq-linux-x64`, `pdq-linux-arm64`, `pdq-macos-arm64`, `pdq-macos-x64`, `pdq-windows-x64.exe`.
 
 ## What to avoid
 

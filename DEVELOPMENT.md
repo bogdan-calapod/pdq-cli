@@ -64,9 +64,8 @@ npm run pkg:linux-arm64    # dist/pdq-linux-arm64
 npm run pkg:macos-arm64    # dist/pdq-macos-arm64 (Apple Silicon)
 npm run pkg:macos-x64      # dist/pdq-macos-x64   (Intel)
 
-# Windows
+# Windows (ARM64 not supported by pkg)
 npm run pkg:windows-x64    # dist/pdq-windows-x64.exe
-npm run pkg:windows-arm64  # dist/pdq-windows-arm64.exe
 ```
 
 ## Releasing

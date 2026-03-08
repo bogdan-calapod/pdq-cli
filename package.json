@@ -20,7 +20,6 @@
     "pkg:macos-arm64": "pkg dist/index.js -t node22-macos-arm64 -o dist/pdq-macos-arm64",
     "pkg:macos-x64": "pkg dist/index.js -t node22-macos-x64 -o dist/pdq-macos-x64",
     "pkg:windows-x64": "pkg dist/index.js -t node22-win-x64 -o dist/pdq-windows-x64.exe",
-    "pkg:windows-arm64": "pkg dist/index.js -t node22-win-arm64 -o dist/pdq-windows-arm64.exe",
     "prepare": "husky"
   },
   "lint-staged": {
