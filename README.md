@@ -29,8 +29,6 @@ brew install bogdan-calapod/tap/pdq-cli
 winget install BogdanCalapod.pdq-cli
 ```
 
-_Pending approval: [microsoft/winget-pkgs#346299](https://github.com/microsoft/winget-pkgs/pull/346299)_
-
 ### Manual download
 
 Grab the latest binary for your platform from the [Releases](../../releases) page — no Node.js required.
