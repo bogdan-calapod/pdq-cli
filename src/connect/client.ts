@@ -24,8 +24,10 @@ export class PDQConnectError extends Error {
 
 export class PDQConnectClient {
   private readonly headers: Record<string, string>;
+  private readonly debug: boolean;
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, debug = false) {
+    this.debug = debug;
     this.headers = {
       Authorization: `Bearer ${apiKey}`,
       Accept: "application/json",
@@ -53,11 +55,19 @@ export class PDQConnectClient {
       }
     }
 
+    if (this.debug) {
+      console.error(`[debug] ${method} ${url.toString()}`);
+    }
+
     const res = await fetch(url.toString(), {
       method,
       headers: this.headers,
       body: body != null ? JSON.stringify(body) : undefined,
     });
+
+    if (this.debug) {
+      console.error(`[debug] Response: ${res.status} ${res.statusText}`);
+    }
 
     if (res.status === 401) {
       throw new PDQConnectError(401, "Unauthorized — check your API key.");

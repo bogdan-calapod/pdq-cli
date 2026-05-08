@@ -8,7 +8,11 @@ import { SKILL_CONTENT } from "./skill.js";
 
 const program = new Command();
 
-program.name("pdq").description("CLI for PDQ products").version("0.1.0");
+program
+  .name("pdq")
+  .description("CLI for PDQ products")
+  .version("0.1.0")
+  .option("--debug", "Print the full request URL before each API call");
 
 registerConnectCommand(program);
 registerDetectCommand(program);

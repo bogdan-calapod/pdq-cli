@@ -33,10 +33,17 @@ export class PDQDetectClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
   private readonly tenantId: number | undefined;
+  private readonly debug: boolean;
 
-  constructor(apiKey: string, baseUrl: string = DETECT_DEFAULT_BASE_URL, tenantId?: number) {
+  constructor(
+    apiKey: string,
+    baseUrl: string = DETECT_DEFAULT_BASE_URL,
+    tenantId?: number,
+    debug = false
+  ) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
     this.tenantId = tenantId;
+    this.debug = debug;
     this.headers = {
       // The Footprint API uses a custom header for API key auth
       FootprintApiKey: apiKey,
@@ -69,11 +76,19 @@ export class PDQDetectClient {
       }
     }
 
+    if (this.debug) {
+      console.error(`[debug] ${method} ${url.toString()}`);
+    }
+
     const res = await fetch(url.toString(), {
       method,
       headers: this.headers,
       body: body != null ? JSON.stringify(body) : undefined,
     });
+
+    if (this.debug) {
+      console.error(`[debug] Response: ${res.status} ${res.statusText}`);
+    }
 
     if (res.status === 401) {
       throw new PDQDetectError(401, "Unauthorized — check your API key.");

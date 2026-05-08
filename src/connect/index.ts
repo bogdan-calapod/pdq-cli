@@ -10,7 +10,10 @@ export function registerConnectCommand(program: Command): void {
   const connect = program.command("connect").description("Interact with PDQ Connect");
 
   // Lazily create the client — only after the API key is resolved at runtime
-  const getClient = (): PDQConnectClient => new PDQConnectClient(getConnectApiKey());
+  const getClient = (): PDQConnectClient => {
+    const rootOpts = connect.parent?.opts<{ debug?: boolean }>() ?? {};
+    return new PDQConnectClient(getConnectApiKey(), rootOpts.debug);
+  };
 
   // ── config ────────────────────────────────────────────────────────────────
   const config = connect.command("config").description("Manage PDQ Connect CLI configuration");

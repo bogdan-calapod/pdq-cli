@@ -26,9 +26,10 @@ export function registerDetectCommand(program: Command): void {
   // Lazily create the client, picking up the --url and --tenant flags at call time
   const getClient = (): PDQDetectClient => {
     const opts = detect.opts<{ url?: string; tenant?: string }>();
+    const rootOpts = detect.parent?.opts<{ debug?: boolean }>() ?? {};
     const url = getDetectBaseUrl(opts.url);
     const tenantId = getDetectTenantId(opts.tenant);
-    return new PDQDetectClient(getDetectApiKey(), url, tenantId);
+    return new PDQDetectClient(getDetectApiKey(), url, tenantId, rootOpts.debug);
   };
 
   // ── config ────────────────────────────────────────────────────────────────
