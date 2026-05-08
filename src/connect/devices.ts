@@ -1,7 +1,8 @@
 import { type Command } from "commander";
-import { type PDQConnectClient, PDQConnectError } from "./client.js";
+import { type PDQConnectClient } from "./client.js";
 import type { Device } from "./types.js";
 import { printRecord, printTable, type OutputFormat } from "../output.js";
+import { handleApiError } from "../errors.js";
 
 // Columns shown in list view
 const LIST_COLUMNS = [
@@ -66,7 +67,7 @@ export function registerDevicesCommands(parent: Command, getClient: () => PDQCon
         const rows = devices.map(deviceToRow);
         printTable(rows, LIST_COLUMNS, opts.output as OutputFormat);
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 
@@ -80,7 +81,7 @@ export function registerDevicesCommands(parent: Command, getClient: () => PDQCon
         const device = await getClient().getDevice(id);
         printRecord(deviceToRow(device), opts.output as OutputFormat);
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 }
@@ -96,13 +97,4 @@ function parseFilter(pairs: string[]): Record<string, string> {
     result[pair.slice(0, eq)] = pair.slice(eq + 1);
   }
   return result;
-}
-
-function handleError(err: unknown): never {
-  if (err instanceof PDQConnectError) {
-    console.error(`Error ${err.status}: ${err.message}`);
-  } else {
-    console.error("Unexpected error:", err);
-  }
-  process.exit(1);
 }

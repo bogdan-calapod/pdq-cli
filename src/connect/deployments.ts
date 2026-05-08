@@ -1,5 +1,6 @@
 import { type Command } from "commander";
-import { type PDQConnectClient, PDQConnectError } from "./client.js";
+import { type PDQConnectClient } from "./client.js";
+import { handleApiError } from "../errors.js";
 
 export function registerDeploymentsCommands(
   parent: Command,
@@ -36,12 +37,7 @@ export function registerDeploymentsCommands(
           `Deployment triggered: package=${opts.package} targets=${targetIds.join(", ")}`
         );
       } catch (err) {
-        if (err instanceof PDQConnectError) {
-          console.error(`Error ${err.status}: ${err.message}`);
-        } else {
-          console.error("Unexpected error:", err);
-        }
-        process.exit(1);
+        handleApiError(err);
       }
     });
 }

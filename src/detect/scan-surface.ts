@@ -1,6 +1,7 @@
 import { type Command } from "commander";
-import { type PDQDetectClient, PDQDetectError } from "./client.js";
+import { type PDQDetectClient } from "./client.js";
 import { printTable, type OutputFormat } from "../output.js";
+import { handleApiError } from "../errors.js";
 
 const LIST_COLUMNS = [
   "id",
@@ -47,7 +48,7 @@ export function registerScanSurfaceCommands(
           opts.output as OutputFormat
         );
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 
@@ -74,7 +75,7 @@ export function registerScanSurfaceCommands(
           );
         }
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 
@@ -91,7 +92,7 @@ export function registerScanSurfaceCommands(
           "table"
         );
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 
@@ -112,16 +113,7 @@ export function registerScanSurfaceCommands(
         await getClient().deleteScanSurface(numIds, opts.deleteAssets);
         console.log(`Deleted ${numIds.length} scan surface entry/entries.`);
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
-}
-
-function handleError(err: unknown): never {
-  if (err instanceof PDQDetectError) {
-    console.error(`Error ${err.status}: ${err.message}`);
-  } else {
-    console.error("Unexpected error:", err);
-  }
-  process.exit(1);
 }

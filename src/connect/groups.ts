@@ -1,7 +1,8 @@
 import { type Command } from "commander";
-import { type PDQConnectClient, PDQConnectError } from "./client.js";
+import { type PDQConnectClient } from "./client.js";
 import type { Group } from "./types.js";
 import { printTable, type OutputFormat } from "../output.js";
+import { handleApiError } from "../errors.js";
 
 const LIST_COLUMNS = ["id", "name", "type", "source", "insertedAt"];
 
@@ -36,7 +37,7 @@ export function registerGroupsCommands(parent: Command, getClient: () => PDQConn
         const groups = await getClient().listGroups({ filter, sort: opts.sort });
         printTable(groups.map(groupToRow), LIST_COLUMNS, opts.output as OutputFormat);
       } catch (err) {
-        handleError(err);
+        handleApiError(err);
       }
     });
 }
@@ -52,13 +53,4 @@ function parseFilter(pairs: string[]): Record<string, string> {
     result[pair.slice(0, eq)] = pair.slice(eq + 1);
   }
   return result;
-}
-
-function handleError(err: unknown): never {
-  if (err instanceof PDQConnectError) {
-    console.error(`Error ${err.status}: ${err.message}`);
-  } else {
-    console.error("Unexpected error:", err);
-  }
-  process.exit(1);
 }

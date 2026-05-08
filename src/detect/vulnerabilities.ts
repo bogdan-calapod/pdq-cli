@@ -1,6 +1,7 @@
 import { type Command } from "commander";
-import { type PDQDetectClient, PDQDetectError } from "./client.js";
+import { type PDQDetectClient } from "./client.js";
 import { printTable, type OutputFormat } from "../output.js";
+import { handleApiError } from "../errors.js";
 
 const LIST_COLUMNS = [
   "id",
@@ -67,17 +68,8 @@ export function registerVulnerabilitiesCommands(
             opts.output as OutputFormat
           );
         } catch (err) {
-          handleError(err);
+          handleApiError(err);
         }
       }
     );
-}
-
-function handleError(err: unknown): never {
-  if (err instanceof PDQDetectError) {
-    console.error(`Error ${err.status}: ${err.message}`);
-  } else {
-    console.error("Unexpected error:", err);
-  }
-  process.exit(1);
 }
