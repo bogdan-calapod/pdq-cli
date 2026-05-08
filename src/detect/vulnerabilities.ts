@@ -4,15 +4,14 @@ import { printTable, type OutputFormat } from "../output.js";
 import { handleApiError } from "../errors.js";
 
 const LIST_COLUMNS = [
-  "id",
   "cve",
+  "severity",
   "cvssBase",
   "isWeaponized",
-  "isExploitable",
   "affectedDevices",
   "affectedApplications",
-  "state",
-  "publishedDate",
+  "firstDiscovered",
+  "lastSeen",
 ];
 
 export function registerVulnerabilitiesCommands(
@@ -31,7 +30,7 @@ export function registerVulnerabilitiesCommands(
     .option("-f, --filter <text>", "Text filter")
     .option("--filter-col <column>", "Column to apply text filter to (cve, summary, ...)")
     .option("--open-only", "Only show open (unresolved) vulnerabilities")
-    .option("--sort <column>", "Sort column (e.g. cvssBase, publishedDate)")
+    .option("--sort <column>", "Sort column (e.g. cvssBase, severity, lastSeen)")
     .option("--sort-dir <dir>", "Sort direction: ascending or descending", "descending")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(
@@ -54,15 +53,15 @@ export function registerVulnerabilitiesCommands(
 
           printTable(
             vulns.map((v) => ({
-              id: v.id,
               cve: v.cve ?? "",
+              severity: v.severity ?? "",
               cvssBase: v.cvssBase ?? "",
               isWeaponized: v.isWeaponized != null ? String(v.isWeaponized) : "",
-              isExploitable: v.isExploitable != null ? String(v.isExploitable) : "",
-              affectedDevices: v.affectedDevices ?? "",
-              affectedApplications: v.affectedApplications ?? "",
-              state: v.state ?? "",
-              publishedDate: v.publishedDate ?? "",
+              affectedDevices: v.affectedDevicesCount ?? "",
+              affectedApplications: v.affectedApplicationsCount ?? "",
+              firstDiscovered: v.firstDiscovered ?? "",
+              lastSeen: v.lastSeen ?? "",
+              summary: (v.summary ?? "").slice(0, 80),
             })),
             LIST_COLUMNS,
             opts.output as OutputFormat

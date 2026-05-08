@@ -3,15 +3,7 @@ import { type PDQDetectClient } from "./client.js";
 import { printTable, type OutputFormat } from "../output.js";
 import { handleApiError } from "../errors.js";
 
-const LIST_COLUMNS = [
-  "id",
-  "userInput",
-  "scannerName",
-  "assetCount",
-  "status",
-  "lastScan",
-  "scope",
-];
+const LIST_COLUMNS = ["id", "input", "user", "scanDate", "scanners"];
 
 export function registerScanSurfaceCommands(
   parent: Command,
@@ -30,19 +22,17 @@ export function registerScanSurfaceCommands(
     .action(async (opts: { scanner?: string; filter?: string; output: string }) => {
       try {
         const entries = await getClient().listScanSurface({
-          scannerId: opts.scanner,
+          scannerId: opts.scanner ? Number(opts.scanner) : undefined,
           textFilter: opts.filter,
         });
         printTable(
           entries.map((e) => ({
             id: e.id,
-            userInput: e.userInput,
-            scannerId: e.scannerId ?? "",
-            scannerName: e.scannerName ?? "",
-            assetCount: e.assetCount ?? "",
-            lastScan: e.lastScan ?? "",
-            status: e.status ?? "",
-            scope: e.scope ?? "",
+            input: e.input,
+            user: e.user?.username ?? "",
+            scanDate: e.scanDate ?? "",
+            scanners:
+              e.scanners?.map((s) => `${s.scannerName ?? s.scannerId ?? "?"}`).join(", ") ?? "",
           })),
           LIST_COLUMNS,
           opts.output as OutputFormat
@@ -57,11 +47,23 @@ export function registerScanSurfaceCommands(
     .description(
       "Add one or more IPs, hostnames, or CIDR ranges to the scan surface and trigger a scan"
     )
-    .option("--scanner <id>", "Target a specific scanner ID")
+    .requiredOption(
+      "--scanners <ids>",
+      "Comma-separated scanner IDs to use for scanning",
+      (val: string) =>
+        val
+          .split(",")
+          .map((s) => Number(s.trim()))
+          .filter((n) => !isNaN(n))
+    )
     .option("--no-scan", "Add to scan surface without triggering an immediate scan")
-    .action(async (targets: string[], opts: { scanner?: string; scan: boolean }) => {
+    .action(async (targets: string[], opts: { scanners: number[]; scan: boolean }) => {
       try {
-        const results = await getClient().addScanSurface(targets, opts.scanner, !opts.scan);
+        if (opts.scanners.length === 0) {
+          console.error("Error: --scanners must contain at least one numeric scanner ID.");
+          process.exit(1);
+        }
+        const results = await getClient().addScanSurface(targets, opts.scanners, !opts.scan);
         if (results.length === 0) {
           console.log("Added to scan surface.");
         } else {

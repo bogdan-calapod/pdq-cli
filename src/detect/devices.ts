@@ -11,7 +11,7 @@ const LIST_COLUMNS = [
   "os",
   "riskLevel",
   "status",
-  "scanType",
+  "scanSource",
   "lastSeen",
   "lastScanned",
 ];
@@ -23,50 +23,37 @@ function deviceListingToRow(d: DeviceListing): Record<string, unknown> {
     ip: d.ip ?? "",
     os: d.os ?? "",
     riskLevel: d.riskLevel ?? "",
-    status: d.status ?? "",
+    status: d.deviceState ?? "",
+    scanSource: d.scanSource ?? "",
     scanType: d.scanType ?? "",
     lastSeen: d.lastSeen ?? "",
     lastScanned: d.lastScanned ?? "",
-    tags: d.tags?.join(", ") ?? "",
-    businessContexts: d.businessContexts?.join(", ") ?? "",
-    technicalContexts: d.technicalContexts?.join(", ") ?? "",
+    discoveredOn: d.discoveredOn ?? "",
+    isOnline: String(d.isOnline ?? ""),
+    scanner: d.scanner?.name ?? "",
+    tags: d.tags?.map((t) => t.name ?? "").join(", ") ?? "",
+    businessContexts: d.businessContextsNames?.join(", ") ?? "",
+    technicalContexts: d.technicalContextsNames?.join(", ") ?? "",
   };
 }
 
 function overviewToRecord(d: DeviceOverview): Record<string, unknown> {
   return {
-    id: d.id,
-    name: d.name,
-    ip: d.ip ?? "",
     os: d.os ?? "",
-    osVersion: d.osVersion ?? "",
-    riskLevel: d.riskLevel ?? "",
-    status: d.status ?? "",
-    scanType: d.scanType ?? "",
-    lastSeen: d.lastSeen ?? "",
-    lastScanned: d.lastScanned ?? "",
-    discovered: d.discovered ?? "",
-    vulnerabilities: d.vulnerabilityCount ?? 0,
-    critical: d.criticalVulnerabilityCount ?? 0,
-    high: d.highVulnerabilityCount ?? 0,
-    medium: d.mediumVulnerabilityCount ?? 0,
-    low: d.lowVulnerabilityCount ?? 0,
-    tags: d.tags?.join(", ") ?? "",
-    businessContexts: d.businessContexts?.map((c) => c.name).join(", ") ?? "",
-    technicalContexts: d.technicalContexts?.map((c) => c.name).join(", ") ?? "",
+    installDate: d.installDate ?? "",
+    lastBootupDate: d.lastBootupDate ?? "",
+    securityProducts: d.securityProducts ?? "",
+    firewallProfiles: d.firewallProfiles ?? "",
+    applications: d.applications?.length ?? 0,
+    installedUpdates: d.installedUpdates?.length ?? 0,
   };
 }
 
 function osToRecord(os: DeviceOS): Record<string, unknown> {
   return {
-    name: os.name ?? "",
-    version: os.version ?? "",
-    architecture: os.architecture ?? "",
-    servicePack: os.servicePack ?? "",
-    kernel: os.kernel ?? "",
-    buildNumber: os.buildNumber ?? "",
-    installDate: os.installDate ?? "",
-    lastBootTime: os.lastBootTime ?? "",
+    osType: os.osType ?? "",
+    isOutdated: String(os.isOutdated ?? ""),
+    isSpring4shellAvailable: String(os.isSpring4shellAvailable ?? ""),
   };
 }
 
@@ -80,9 +67,12 @@ export function registerDevicesCommands(parent: Command, getClient: () => PDQDet
     .option("--name <name>", "Filter by device name")
     .option("--ip <ip>", "Filter by IP address")
     .option("--os <os>", "Filter by OS string")
-    .option("--risk <level>", "Filter by risk level (critical, high, medium, low, none)")
-    .option("--status <status>", "Filter by status (active, inactive, unknown)")
-    .option("--scan-type <type>", "Filter by scan type (agent, agentless, network_edge)")
+    .option("--risk <level>", "Filter by risk level (critical, vulnerable, secure, unknown)")
+    .option(
+      "--status <status>",
+      "Filter by status (online, offline, notSeenOnLastScan, decommissioned)"
+    )
+    .option("--scan-type <type>", "Filter by scan type")
     .option("--tags <tags>", "Filter by tag(s), comma-separated")
     .option("--sort <column>", "Sort column (e.g. name, riskLevel, lastSeen)")
     .option("--sort-dir <dir>", "Sort direction: ascending or descending", "ascending")
@@ -105,9 +95,9 @@ export function registerDevicesCommands(parent: Command, getClient: () => PDQDet
             name: opts.name,
             ip: opts.ip,
             os: opts.os,
-            riskLevel: opts.risk as DeviceListing["riskLevel"],
-            status: opts.status as DeviceListing["status"],
-            scanType: opts.scanType as DeviceListing["scanType"],
+            riskLevel: opts.risk,
+            status: opts.status,
+            scanType: opts.scanType,
             tags: opts.tags,
             sortColumn: opts.sort,
             sortDirection: opts.sortDir as "ascending" | "descending",
@@ -155,7 +145,7 @@ export function registerDevicesCommands(parent: Command, getClient: () => PDQDet
   get
     .command("vulnerabilities")
     .description("Vulnerabilities on the device")
-    .option("--state <state>", "Filter by state (open, accepted_risk, resolved, ...)")
+    .option("--state <state>", "Filter by state (discovered, acceptRisk, fixConfirmed, ...)")
     .option("--search <text>", "Search term")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(async (opts: { state?: string; search?: string; output: string }, cmd: Command) => {
@@ -190,12 +180,13 @@ async function fetchAndPrint(
       const users = await client.getDeviceUsers(id);
       printTable(
         users.map((u) => ({
-          username: u.username ?? "",
-          domain: u.domain ?? "",
-          lastLogon: u.lastLogon ?? "",
-          isAdmin: u.isAdmin != null ? String(u.isAdmin) : "",
+          name: u.name ?? "",
+          accountType: u.accountType ?? "",
+          description: u.description ?? "",
+          disabled: u.disabled ?? "",
+          passwordExpires: u.passwordExpires ?? "",
         })),
-        ["username", "domain", "lastLogon", "isAdmin"],
+        ["name", "accountType", "description", "disabled", "passwordExpires"],
         format
       );
     } else {
@@ -204,15 +195,15 @@ async function fetchAndPrint(
         search: extra.search,
       });
       printTable(
-        page.results.map((v) => ({
+        page.items.map((v) => ({
           id: v.id,
           cve: v.cve ?? "",
-          cvssBase: v.cvssBase ?? "",
-          isWeaponized: v.isWeaponized != null ? String(v.isWeaponized) : "",
+          cvssScore: v.cvssScore ?? "",
           state: v.state ?? "",
+          severity: v.cvssBaseSeverity ?? "",
           summary: (v.summary ?? "").slice(0, 80),
         })),
-        ["id", "cve", "cvssBase", "isWeaponized", "state", "summary"],
+        ["id", "cve", "cvssScore", "state", "severity", "summary"],
         format
       );
     }

@@ -8,11 +8,11 @@ const LIST_COLUMNS = [
   "id",
   "name",
   "version",
-  "publisher",
+  "ip",
   "riskLevel",
-  "deviceCount",
-  "vulnerabilityCount",
-  "scanType",
+  "status",
+  "applicationType",
+  "lastSeen",
 ];
 
 export function registerApplicationsCommands(
@@ -29,10 +29,10 @@ export function registerApplicationsCommands(
     .command("list")
     .description("List all discovered applications")
     .option("-f, --filter <text>", "Text filter (name, publisher, ...)")
-    .option("--risk <level>", "Filter by risk level (critical, high, medium, low, none)")
-    .option("--scan-type <type>", "Filter by scan type (agent, agentless, network_edge)")
-    .option("--status <status>", "Filter by status (active, inactive, unknown)")
-    .option("--sort <column>", "Sort column (e.g. name, riskLevel, deviceCount)")
+    .option("--risk <level>", "Filter by risk level (critical, vulnerable, secure, unknown)")
+    .option("--scan-type <type>", "Filter by scan type (all, discovered, scanned)")
+    .option("--status <status>", "Filter by status (online, offline, notSeenOnLastScan)")
+    .option("--sort <column>", "Sort column (e.g. name, discoveredOn, lastSeen)")
     .option("--sort-dir <dir>", "Sort direction: ascending or descending", "ascending")
     .option("-o, --output <format>", "Output format: table, json, csv", "table")
     .action(
@@ -48,24 +48,28 @@ export function registerApplicationsCommands(
         try {
           const apps = await getClient().listApplications({
             filter: opts.filter,
-            riskLevel: opts.risk as ApplicationListing["riskLevel"],
-            scanType: opts.scanType as ApplicationListing["scanType"],
-            status: opts.status as ApplicationListing["status"],
+            riskLevel: opts.risk,
+            scanType: opts.scanType,
+            status: opts.status,
             sortColumn: opts.sort,
             sortDirection: opts.sortDir as "ascending" | "descending",
           });
 
           printTable(
-            apps.map((a) => ({
+            apps.map((a: ApplicationListing) => ({
               id: a.id,
               name: a.name,
               version: a.version ?? "",
-              publisher: a.publisher ?? "",
-              riskLevel: a.riskLevel ?? "",
-              deviceCount: a.deviceCount ?? "",
-              vulnerabilityCount: a.vulnerabilityCount ?? "",
-              scanType: a.scanType ?? "",
-              scope: a.scope ?? "",
+              ip: a.ip ?? "",
+              riskLevel: a.riskLevelByCrs ?? String(a.riskLevel ?? ""),
+              status: a.status ?? "",
+              applicationType: a.applicationType ?? "",
+              hostname: a.hostname ?? "",
+              port: a.port ?? "",
+              protocol: a.protocol ?? "",
+              lastSeen: a.lastSeen ?? "",
+              discoveredOn: a.discoveredOn ?? "",
+              isOnline: String(a.isOnline ?? ""),
             })),
             LIST_COLUMNS,
             opts.output as OutputFormat
@@ -94,17 +98,19 @@ export function registerApplicationsCommands(
             id: app.id,
             name: app.name,
             version: app.version ?? "",
-            publisher: app.publisher ?? "",
+            ip: app.ip ?? "",
             riskLevel: app.riskLevel ?? "",
             status: app.status ?? "",
-            scanType: app.scanType ?? "",
-            deviceCount: app.deviceCount ?? "",
-            vulnerabilityCount: app.vulnerabilityCount ?? "",
-            critical: app.criticalVulnerabilityCount ?? "",
-            high: app.highVulnerabilityCount ?? "",
-            medium: app.mediumVulnerabilityCount ?? "",
-            low: app.lowVulnerabilityCount ?? "",
-            cpeNames: app.cpeNames?.join(", ") ?? "",
+            applicationType: app.applicationType ?? "",
+            hostname: app.hostname ?? "",
+            port: app.port ?? "",
+            protocol: app.protocol ?? "",
+            cpe: app.cpe ?? "",
+            numberOfCves: app.numberOfCves ?? 0,
+            numberOfAttackAvenues: app.numberOfAttackAvenues ?? 0,
+            crss: app.crss ?? "",
+            lastSeen: app.lastSeen ?? "",
+            discoveredOn: app.discoveredOn ?? "",
           },
           opts.output as OutputFormat
         );

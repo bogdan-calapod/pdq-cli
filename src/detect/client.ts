@@ -108,6 +108,10 @@ export class PDQDetectClient {
     return res.json() as Promise<T>;
   }
 
+  /**
+   * Auto-paginate through all pages using the Footprint pagination envelope:
+   *   { page, totalPages, totalCount, items[] }
+   */
   private async getAll<T>(
     path: string,
     params: Record<string, string | number | boolean | undefined>,
@@ -124,9 +128,9 @@ export class PDQDetectClient {
         [pageKey]: page,
         [sizeKey]: pageSize,
       });
-      if (!res?.results) break;
-      results.push(...res.results);
-      if (!res.next) break;
+      if (!res?.items) break;
+      results.push(...res.items);
+      if (page >= res.totalPages) break;
       page++;
     }
 
@@ -147,6 +151,9 @@ export class PDQDetectClient {
         riskLevel: opts.riskLevel,
         status: opts.status,
         scanType: opts.scanType,
+        scanSource: opts.scanSource,
+        scannerId: opts.scannerId,
+        scope: opts.scope,
         tags: opts.tags,
         sortColumn: opts.sortColumn,
         sortDirection: opts.sortDirection,
@@ -183,8 +190,8 @@ export class PDQDetectClient {
     );
   }
 
-  async getDeviceApplications(deviceId: number): Promise<Paginated<ApplicationListing>> {
-    return this.request<Paginated<ApplicationListing>>(
+  async getDeviceApplications(deviceId: number): Promise<Paginated<ApplicationDetails>> {
+    return this.request<Paginated<ApplicationDetails>>(
       "GET",
       `/console/elements/device/${deviceId}/applications/`
     );
@@ -201,6 +208,7 @@ export class PDQDetectClient {
         filter: opts.filter,
         riskLevel: opts.riskLevel,
         scanType: opts.scanType,
+        scope: opts.scope,
         status: opts.status,
         sortColumn: opts.sortColumn,
         sortDirection: opts.sortDirection,
@@ -253,11 +261,11 @@ export class PDQDetectClient {
   }
 
   async addScanSurface(
-    userInputs: string[],
-    scannerId?: string,
+    scanTargets: string[],
+    scannerIds: number[],
     noScan = false
   ): Promise<ScanUuidScannerId[]> {
-    const body: ExtendMessageRequest = { userInputs, scannerId };
+    const body: ExtendMessageRequest = { scanTargets, scanners: scannerIds };
     return this.request<ScanUuidScannerId[]>(
       "POST",
       "/console/scanSurface/",
