@@ -105,6 +105,7 @@ export class PDQDetectClient {
         [pageKey]: page,
         [sizeKey]: pageSize,
       });
+      if (!res?.results) break;
       results.push(...res.results);
       if (!res.next) break;
       page++;

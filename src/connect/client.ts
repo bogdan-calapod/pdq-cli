@@ -99,6 +99,7 @@ export class PDQConnectClient {
         page,
         pageSize: PAGE_SIZE,
       });
+      if (!res?.data) break;
       results.push(...res.data);
       if (res.data.length < PAGE_SIZE) break;
       page++;
