@@ -32,7 +32,6 @@ export class PDQDetectError extends Error {
 export class PDQDetectClient {
   private readonly baseUrl: string;
   private readonly headers: Record<string, string>;
-  private readonly tenantId: number | undefined;
   private readonly debug: boolean;
 
   constructor(
@@ -42,7 +41,6 @@ export class PDQDetectClient {
     debug = false
   ) {
     this.baseUrl = baseUrl.replace(/\/$/, "");
-    this.tenantId = tenantId;
     this.debug = debug;
     this.headers = {
       // The Footprint API uses a custom header for API key auth
@@ -50,6 +48,10 @@ export class PDQDetectClient {
       Accept: "application/json",
       "Content-Type": "application/json",
     };
+
+    if (tenantId !== undefined) {
+      this.headers["FootprintTenantId"] = String(tenantId);
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -63,10 +65,6 @@ export class PDQDetectClient {
     body?: unknown
   ): Promise<T> {
     const url = new URL(`${this.baseUrl}/api${path}`);
-
-    if (this.tenantId !== undefined) {
-      url.searchParams.set("tId", String(this.tenantId));
-    }
 
     if (params) {
       for (const [key, value] of Object.entries(params)) {
