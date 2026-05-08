@@ -74,13 +74,16 @@ Column projection for table/csv is passed as the second argument to `printTable`
 
 `src/config.ts` resolution order for each product:
 
-|                     | Connect                   | Detect                   |
-| ------------------- | ------------------------- | ------------------------ |
-| Env var             | `PDQ_CONNECT_API_KEY`     | `PDQ_DETECT_API_KEY`     |
-| Config key          | `connectApiKey`           | `detectApiKey`           |
-| Base URL env var    | —                         | `PDQ_DETECT_URL`         |
-| Base URL config key | —                         | `detectBaseUrl`          |
-| Base URL default    | `https://connect.pdq.com` | `https://detect.pdq.com` |
+|                      | Connect                   | Detect                   |
+| -------------------- | ------------------------- | ------------------------ |
+| Env var              | `PDQ_CONNECT_API_KEY`     | `PDQ_DETECT_API_KEY`     |
+| Config key           | `connectApiKey`           | `detectApiKey`           |
+| Base URL env var     | —                         | `PDQ_DETECT_URL`         |
+| Base URL config key  | —                         | `detectBaseUrl`          |
+| Base URL default     | `https://connect.pdq.com` | `https://detect.pdq.com` |
+| Tenant ID env var    | —                         | `PDQ_DETECT_TENANT_ID`   |
+| Tenant ID config key | —                         | `detectTenantId`         |
+| Tenant ID default    | —                         | none (omitted if unset)  |
 
 Config file location: `$XDG_CONFIG_HOME/pdqcli/config.json` (falls back to `~/.config/pdqcli/config.json`).
 

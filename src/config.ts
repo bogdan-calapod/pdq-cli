@@ -9,6 +9,7 @@ interface ConfigFile {
   connectApiKey?: string;
   detectApiKey?: string;
   detectBaseUrl?: string;
+  detectTenantId?: number;
 }
 
 function getConfigFilePath(): string {
@@ -122,4 +123,25 @@ export function getDetectBaseUrl(flagValue?: string): string {
 
 export function setDetectBaseUrl(url: string): void {
   writeConfigFile({ ...readConfigFile(), detectBaseUrl: url });
+}
+
+/**
+ * Resolve the PDQ Detect tenant ID.
+ * Priority:
+ *   1. --tenant flag passed at runtime (callers handle this)
+ *   2. PDQ_DETECT_TENANT_ID environment variable
+ *   3. detectTenantId in config file
+ *   4. undefined (no tenant scoping)
+ */
+export function getDetectTenantId(flagValue?: string): number | undefined {
+  if (flagValue?.trim()) return Number(flagValue.trim());
+  const fromEnv = process.env["PDQ_DETECT_TENANT_ID"];
+  if (fromEnv?.trim()) return Number(fromEnv.trim());
+  const fromFile = readConfigFile().detectTenantId;
+  if (fromFile !== undefined) return fromFile;
+  return undefined;
+}
+
+export function setDetectTenantId(tenantId: number): void {
+  writeConfigFile({ ...readConfigFile(), detectTenantId: tenantId });
 }

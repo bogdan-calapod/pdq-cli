@@ -108,7 +108,7 @@ src/
 ## Architecture notes
 
 - **CommonJS output** — `tsconfig.json` targets CommonJS (not ESM). This is required for `@yao-pkg/pkg` binary compilation; ESM entry points are not supported by the packager.
-- **Auth resolution** — `src/config.ts` resolves credentials in priority order: CLI flag → environment variable → XDG config file (`$XDG_CONFIG_HOME/pdqcli/config.json`, defaulting to `~/.config/pdqcli/config.json`).
+- **Auth resolution** — `src/config.ts` resolves credentials in priority order: CLI flag → environment variable → XDG config file (`$XDG_CONFIG_HOME/pdqcli/config.json`, defaulting to `~/.config/pdqcli/config.json`). Detect also supports an optional tenant ID (`--tenant` flag / `PDQ_DETECT_TENANT_ID` env var / `detectTenantId` config key) which is sent as the `tId` query parameter on every API request.
 - **PDQ Detect auth** — The Detect API uses a `FootprintApiKey` HTTP header, not `Authorization: Bearer`. This is different from PDQ Connect.
 - **Detect pagination** — The Detect API follows Django REST Framework pagination: `{ count, next, previous, results[] }`. The client auto-paginates to collect all results before returning.
 - **`pdq get-skill`** — The user-facing `SKILL.md` is baked into the binary as a string constant in `src/skill.ts` at compile time. Update that file whenever commands change, then rebuild.

@@ -1,6 +1,13 @@
 import { type Command } from "commander";
 import { PDQDetectClient } from "./client.js";
-import { getDetectApiKey, getDetectBaseUrl, setDetectApiKey, setDetectBaseUrl } from "../config.js";
+import {
+  getDetectApiKey,
+  getDetectBaseUrl,
+  getDetectTenantId,
+  setDetectApiKey,
+  setDetectBaseUrl,
+  setDetectTenantId,
+} from "../config.js";
 import { registerDevicesCommands } from "./devices.js";
 import { registerVulnerabilitiesCommands } from "./vulnerabilities.js";
 import { registerApplicationsCommands } from "./applications.js";
@@ -13,13 +20,15 @@ export function registerDetectCommand(program: Command): void {
     .option(
       "--url <baseUrl>",
       "Base URL of your PDQ Detect instance (default: https://detect.pdq.com)"
-    );
+    )
+    .option("--tenant <tenantId>", "Tenant ID to scope API requests to");
 
-  // Lazily create the client, picking up the --url flag at call time
+  // Lazily create the client, picking up the --url and --tenant flags at call time
   const getClient = (): PDQDetectClient => {
-    // Walk up the command tree to find the --url option
-    const url = getDetectBaseUrl(detect.opts<{ url?: string }>().url);
-    return new PDQDetectClient(getDetectApiKey(), url);
+    const opts = detect.opts<{ url?: string; tenant?: string }>();
+    const url = getDetectBaseUrl(opts.url);
+    const tenantId = getDetectTenantId(opts.tenant);
+    return new PDQDetectClient(getDetectApiKey(), url, tenantId);
   };
 
   // ── config ────────────────────────────────────────────────────────────────
@@ -39,6 +48,18 @@ export function registerDetectCommand(program: Command): void {
     )
     .action((url: string) => {
       setDetectBaseUrl(url);
+    });
+
+  config
+    .command("set-tenant <tenantId>")
+    .description("Save the PDQ Detect tenant ID to the local config file")
+    .action((tenantId: string) => {
+      const id = Number(tenantId);
+      if (!Number.isInteger(id) || id <= 0) {
+        console.error("Error: tenant ID must be a positive integer.");
+        process.exit(1);
+      }
+      setDetectTenantId(id);
     });
 
   // ── resource sub-commands ─────────────────────────────────────────────────

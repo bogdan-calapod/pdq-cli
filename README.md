@@ -136,6 +136,16 @@ pdq detect config set-url https://your-instance.example.com
 pdq detect --url https://your-instance.example.com devices list
 ```
 
+If your API key has access to multiple tenants, specify the tenant ID to scope requests:
+
+```sh
+export PDQ_DETECT_TENANT_ID=12345
+# or persist it:
+pdq detect config set-tenant 12345
+# or pass it inline:
+pdq detect --tenant 12345 devices list
+```
+
 ## Commands
 
 All list/get commands support `--output table|json|csv` (default: `table`).

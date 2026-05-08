@@ -45,6 +45,11 @@ The Detect base URL defaults to \`https://detect.pdq.com\`. Override it via:
 - Environment variable: \`PDQ_DETECT_URL=https://... pdq detect devices list\`
 - Config file: \`pdq detect config set-url https://...\`
 
+If your API key has access to multiple tenants, specify the tenant ID to scope requests:
+- Flag: \`pdq detect --tenant 12345 devices list\`
+- Environment variable: \`PDQ_DETECT_TENANT_ID=12345 pdq detect devices list\`
+- Config file: \`pdq detect config set-tenant 12345\`
+
 ## Output formats
 
 Every list and get command accepts \`--output table|json|csv\` (default: \`table\`).
